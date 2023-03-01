@@ -1,3 +1,7 @@
 from django.contrib import admin
+from app.models import Modele
 
-# Register your models here.
+class ModeleAdmin(admin.ModelAdmin):
+    list_display = ("nom", "url", "date_created", "accuracy", "recall")
+
+admin.site.register(Modele, ModeleAdmin)
