@@ -40,3 +40,6 @@ class Prediction(models.Model):
     commentaire = models.CharField(max_length=510, blank=True, null=True)
     modele = models.ForeignKey("app.Modele", on_delete=models.CASCADE, related_name="predictions")
     image = models.ForeignKey("app.Image", on_delete=models.CASCADE, related_name="predictions")
+
+    def __str__(self):
+        return self.nom
