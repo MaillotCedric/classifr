@@ -68,11 +68,11 @@ brief 2b, le retour
 
 - Datasets :
 
-  `src > data`
+  `data/`
 
 - Modèles :
 
-  `src > models`
+  `models/`
 
 ## Lancer le serveur Django :
 
