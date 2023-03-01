@@ -30,9 +30,6 @@ class DetailsModele(models.Model):
         managed = True
         unique_together = [["modele", "categorie"]]
 
-    def __str__(self):
-        return self.modele
-
 class Image(models.Model):
     nom = models.CharField(max_length=255)
     url = models.URLField()
@@ -55,7 +52,7 @@ class Prediction(models.Model):
         managed = True
 
     def __str__(self):
-        return self.correct
+        return f"{self.modele.nom}/{self.image.nom}"
 
 class Resultat(models.Model):
     score = models.DecimalField(max_digits=3, decimal_places=1)
@@ -65,6 +62,3 @@ class Resultat(models.Model):
     class Meta:
         managed = True
         unique_together = [["categorie", "prediction"]]
-
-    def __str__(self):
-        return self.score
