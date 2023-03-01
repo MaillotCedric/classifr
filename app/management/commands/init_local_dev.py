@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
-from app.models import Categorie, Modele, DetailsModele, Image
+from app.models import Categorie, Modele, DetailsModele, Image, Prediction
 
 ADMIN_ID = "admin"
 ADMIN_PASSWORD = "admin"
@@ -108,6 +108,12 @@ class Command(BaseCommand):
                                               active=image["active"])
             
             images_bdd[image["nom"]] = image_cree
+
+        self.stdout.write(self.style.MIGRATE_HEADING("Prédictions..."))
+        Prediction.objects.create(modele=modeles_bdd["monet"],
+                                  image=images_bdd["gateau_1"])
+        Prediction.objects.create(modele=modeles_bdd["dali"],
+                                  image=images_bdd["pizza_1"])
 
         self.stdout.write(self.style.MIGRATE_HEADING("Création d'un super utilisateur..."))
         UserModel.objects.create_superuser(ADMIN_ID, "admin@example.com", ADMIN_PASSWORD)
