@@ -12,3 +12,6 @@ class Modele(models.Model):
 
 class Categorie(models.Model):
     nom = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.nom
