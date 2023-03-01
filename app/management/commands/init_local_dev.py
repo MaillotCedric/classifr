@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
-from app.models import Categorie, Modele, DetailsModele
+from app.models import Categorie, Modele, DetailsModele, Image
 
 ADMIN_ID = "admin"
 ADMIN_PASSWORD = "admin"
@@ -21,6 +21,38 @@ MODELES = [
         "recall": 87.3
     }
 ]
+IMAGES = [
+    {
+        "nom": "tulipe_1",
+        "url": "data/tulipe_1.jpeg",
+        "categorie": "tulipe",
+        "active": True
+    },
+    {
+        "nom": "rose_1",
+        "url": "data/rose_1.jpeg",
+        "categorie": "rose",
+        "active": True
+    },
+    {
+        "nom": "tournesol_1",
+        "url": "data/tournesol_1.jpeg",
+        "categorie": "tournesol",
+        "active": True
+    },
+    {
+        "nom": "pizza_1",
+        "url": "data/pizza_1.jpeg",
+        "categorie": "pizza",
+        "active": False
+    },
+    {
+        "nom": "gateau_1",
+        "url": "data/gateau_1.jpeg",
+        "categorie": "gateau",
+        "active": False
+    }
+]
 
 UserModel = get_user_model()
 
@@ -30,6 +62,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         categories_bdd = {}
         modeles_bdd = {}
+        images_bdd = {}
 
         self.stdout.write(self.style.MIGRATE_HEADING(self.help))
 
@@ -38,6 +71,7 @@ class Command(BaseCommand):
         DetailsModele.objects.all().delete()
         Modele.objects.all().delete()
         Categorie.objects.all().delete()
+        Image.objects.all().delete()
 
         self.stdout.write(self.style.MIGRATE_HEADING("Création d'un nouveau jeu de données..."))
         self.stdout.write(self.style.MIGRATE_HEADING("Catégories..."))
@@ -56,23 +90,24 @@ class Command(BaseCommand):
             modeles_bdd[modele["nom"]] = modele_cree
 
         self.stdout.write(self.style.MIGRATE_HEADING("Détails modèle..."))
-        DetailsModele.objects.create(modele=modeles_bdd["monet"],
-                                     categorie=categories_bdd["tulipe"])
-        DetailsModele.objects.create(modele=modeles_bdd["monet"],
-                                     categorie=categories_bdd["rose"])
-        DetailsModele.objects.create(modele=modeles_bdd["monet"],
-                                     categorie=categories_bdd["tournesol"])
-        
-        DetailsModele.objects.create(modele=modeles_bdd["dali"],
-                                     categorie=categories_bdd["tulipe"])
-        DetailsModele.objects.create(modele=modeles_bdd["dali"],
-                                     categorie=categories_bdd["rose"])
-        DetailsModele.objects.create(modele=modeles_bdd["dali"],
-                                     categorie=categories_bdd["tournesol"])
+        for modele in modeles_bdd:
+            for categorie in ["tulipe", "rose", "tournesol"]:
+                DetailsModele.objects.create(modele=modeles_bdd[modele],
+                                     categorie=categories_bdd[categorie])
+
         DetailsModele.objects.create(modele=modeles_bdd["dali"],
                                      categorie=categories_bdd["pizza"])
         DetailsModele.objects.create(modele=modeles_bdd["dali"],
                                      categorie=categories_bdd["gateau"])
+        
+        self.stdout.write(self.style.MIGRATE_HEADING("Images..."))
+        for image in IMAGES:
+            image_cree = Image.objects.create(nom=image["nom"],
+                                              url=image["url"],
+                                              categorie=categories_bdd[image["categorie"]],
+                                              active=image["active"])
+            
+            images_bdd[image["nom"]] = image_cree
 
         self.stdout.write(self.style.MIGRATE_HEADING("Création d'un super utilisateur..."))
         UserModel.objects.create_superuser(ADMIN_ID, "admin@example.com", ADMIN_PASSWORD)
