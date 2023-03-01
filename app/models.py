@@ -25,3 +25,12 @@ class DetailsModele(models.Model):
 
     def __str__(self):
         return self.modele
+
+class Image(models.Model):
+    nom = models.CharField(max_length=255)
+    url = models.URLField()
+    categorie = models.ForeignKey("app.Categorie", on_delete=models.CASCADE, related_name="images")
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.nom
