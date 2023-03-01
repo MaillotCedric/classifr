@@ -34,3 +34,9 @@ class Image(models.Model):
 
     def __str__(self):
         return self.nom
+
+class Prediction(models.Model):
+    correct = models.BooleanField(blank=True, null=True)
+    commentaire = models.CharField(max_length=510, blank=True, null=True)
+    modele = models.ForeignKey("app.Modele", on_delete=models.CASCADE, related_name="predictions")
+    image = models.ForeignKey("app.Image", on_delete=models.CASCADE, related_name="predictions")
