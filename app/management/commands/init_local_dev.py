@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
-from app.models import Categorie, Modele, DetailsModele, Image, Prediction
+from app.models import Categorie, Modele, DetailsModele, Image, Prediction, Resultat
 
 ADMIN_ID = "admin"
 ADMIN_PASSWORD = "admin"
@@ -72,6 +72,8 @@ class Command(BaseCommand):
         Modele.objects.all().delete()
         Categorie.objects.all().delete()
         Image.objects.all().delete()
+        Prediction.objects.all().delete()
+        Resultat.objects.all().delete()
 
         self.stdout.write(self.style.MIGRATE_HEADING("Création d'un nouveau jeu de données..."))
         self.stdout.write(self.style.MIGRATE_HEADING("Catégories..."))
@@ -110,10 +112,37 @@ class Command(BaseCommand):
             images_bdd[image["nom"]] = image_cree
 
         self.stdout.write(self.style.MIGRATE_HEADING("Prédictions..."))
-        Prediction.objects.create(modele=modeles_bdd["monet"],
+        prediction_monet_1 = Prediction.objects.create(modele=modeles_bdd["monet"],
                                   image=images_bdd["gateau_1"])
-        Prediction.objects.create(modele=modeles_bdd["dali"],
+        prediction_dali_1 = Prediction.objects.create(modele=modeles_bdd["dali"],
                                   image=images_bdd["pizza_1"])
+        
+        self.stdout.write(self.style.MIGRATE_HEADING("Résultats..."))
+        Resultat.objects.create(score=10.3,
+                                categorie=categories_bdd["tulipe"],
+                                prediction=prediction_monet_1)
+        Resultat.objects.create(score=8.5,
+                                categorie=categories_bdd["rose"],
+                                prediction=prediction_monet_1)
+        Resultat.objects.create(score=1.2,
+                                categorie=categories_bdd["tournesol"],
+                                prediction=prediction_monet_1)
+        
+        Resultat.objects.create(score=10.2,
+                                categorie=categories_bdd["tulipe"],
+                                prediction=prediction_dali_1)
+        Resultat.objects.create(score=8.3,
+                                categorie=categories_bdd["rose"],
+                                prediction=prediction_dali_1)
+        Resultat.objects.create(score=1.6,
+                                categorie=categories_bdd["tournesol"],
+                                prediction=prediction_dali_1)
+        Resultat.objects.create(score=98.8,
+                                categorie=categories_bdd["pizza"],
+                                prediction=prediction_dali_1)
+        Resultat.objects.create(score=9.8,
+                                categorie=categories_bdd["gateau"],
+                                prediction=prediction_dali_1)
 
         self.stdout.write(self.style.MIGRATE_HEADING("Création d'un super utilisateur..."))
         UserModel.objects.create_superuser(ADMIN_ID, "admin@example.com", ADMIN_PASSWORD)
