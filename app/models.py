@@ -43,3 +43,14 @@ class Prediction(models.Model):
 
     def __str__(self):
         return self.image
+
+class Resultat(models.Model):
+    score = models.DecimalField(max_digits=3, decimal_places=1)
+    categorie = models.ForeignKey("app.Categorie", on_delete=models.CASCADE, related_name="resultats")
+    prediction = models.ForeignKey("app.Prediction", on_delete=models.CASCADE, related_name="resultats")
+
+    class Meta:
+        unique_together = [["categorie", "prediction"]]
+
+    def __str__(self):
+        return self.score
