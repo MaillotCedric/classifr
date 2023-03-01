@@ -42,4 +42,4 @@ class Prediction(models.Model):
     image = models.ForeignKey("app.Image", on_delete=models.CASCADE, related_name="predictions")
 
     def __str__(self):
-        return self.nom
+        return self.image
