@@ -15,3 +15,13 @@ class Categorie(models.Model):
 
     def __str__(self):
         return self.nom
+
+class DetailsModele(models.Model):
+    modele = models.ForeignKey("app.Modele", on_delete=models.CASCADE, related_name="details_modele")
+    categorie = models.ForeignKey("app.Categorie", on_delete=models.CASCADE, related_name="details_modele")
+
+    class Meta:
+        unique_together = [["modele", "categorie"]]
+
+    def __str__(self):
+        return self.modele
