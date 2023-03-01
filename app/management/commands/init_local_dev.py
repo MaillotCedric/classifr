@@ -118,24 +118,17 @@ class Command(BaseCommand):
                                   image=images_bdd["pizza_1"])
         
         self.stdout.write(self.style.MIGRATE_HEADING("Résultats..."))
-        Resultat.objects.create(score=10.3,
-                                categorie=categories_bdd["tulipe"],
+        scores_prediction_monet_1 = [10.3, 8.5, 1.2]
+        scores_prediction_dali_1 = [10.2, 8.3, 1.6]
+        categories_predictions = ["tulipe", "rose", "tournesol"]
+
+        for index in range(3):
+            Resultat.objects.create(score=scores_prediction_monet_1[index],
+                                categorie=categories_bdd[categories_predictions[index]],
                                 prediction=prediction_monet_1)
-        Resultat.objects.create(score=8.5,
-                                categorie=categories_bdd["rose"],
-                                prediction=prediction_monet_1)
-        Resultat.objects.create(score=1.2,
-                                categorie=categories_bdd["tournesol"],
-                                prediction=prediction_monet_1)
-        
-        Resultat.objects.create(score=10.2,
-                                categorie=categories_bdd["tulipe"],
-                                prediction=prediction_dali_1)
-        Resultat.objects.create(score=8.3,
-                                categorie=categories_bdd["rose"],
-                                prediction=prediction_dali_1)
-        Resultat.objects.create(score=1.6,
-                                categorie=categories_bdd["tournesol"],
+        for index in range(3):
+            Resultat.objects.create(score=scores_prediction_dali_1[index],
+                                categorie=categories_bdd[categories_predictions[index]],
                                 prediction=prediction_dali_1)
         Resultat.objects.create(score=98.8,
                                 categorie=categories_bdd["pizza"],
