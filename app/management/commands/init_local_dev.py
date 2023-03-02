@@ -24,31 +24,31 @@ MODELES = [
 IMAGES = [
     {
         "nom": "tulipe_1",
-        "chemin": "data/tulipe_1.jpeg",
+        "chemin": "data/tulipe_1.jpg",
         "categorie": "tulipe",
         "active": True
     },
     {
         "nom": "rose_1",
-        "chemin": "data/rose_1.jpeg",
+        "chemin": "data/rose_1.jpg",
         "categorie": "rose",
         "active": True
     },
     {
         "nom": "tournesol_1",
-        "chemin": "data/tournesol_1.jpeg",
+        "chemin": "data/tournesol_1.jpg",
         "categorie": "tournesol",
         "active": True
     },
     {
         "nom": "pizza_1",
-        "chemin": "data/pizza_1.jpeg",
+        "chemin": "data/pizza_1.jpg",
         "categorie": "pizza",
         "active": False
     },
     {
         "nom": "gateau_1",
-        "chemin": "data/gateau_1.jpeg",
+        "chemin": "data/gateau_1.jpg",
         "categorie": "gateau",
         "active": False
     }
@@ -77,6 +77,8 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.MIGRATE_HEADING("Création d'un nouveau jeu de données..."))
         self.stdout.write(self.style.MIGRATE_HEADING("Catégories..."))
+        Categorie.objects.create(nom="inconnue")
+
         for categorie in CATEGORIES:
             categorie_cree = Categorie.objects.create(nom=categorie)
 
