@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from app.models import Image, Prediction, Resultat
 
@@ -16,6 +16,9 @@ class MultipleSerializerMixin:
             return self.details_serializer_class
         
         return super().get_serializer_class()
+
+class UserViewSet(ModelViewSet):
+    http_method_names = ["get", "post", "put", "patch"]
 
 class ImageAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     serializer_class = ImageListSerializer
