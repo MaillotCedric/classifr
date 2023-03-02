@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer,SerializerMethodField
 
-from app.models import Image, Categorie, Prediction
+from app.models import Image, Categorie, Prediction, Resultat
 
 class CategorieListSerializer(ModelSerializer):
     class Meta:
@@ -36,4 +36,17 @@ class PredictionListSerializer(ModelSerializer):
         queryset = instance.image
         serializer = ImageListSerializer(queryset)
         
+        return serializer.data
+
+class ResultatListSerializer(ModelSerializer):
+    categorie = SerializerMethodField()
+
+    class Meta:
+        model = Resultat
+        fields = ["prediction", "score", "categorie"]
+    
+    def get_categorie(self, instance):
+        queryset = instance.categorie
+        serializer = CategorieListSerializer(queryset)
+
         return serializer.data
