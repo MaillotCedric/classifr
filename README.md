@@ -2,7 +2,7 @@
 
 brief 2b, le retour
 
-## Installation :
+## Installation
 
 - Branch checkout :
 
@@ -57,12 +57,26 @@ brief 2b, le retour
   puis
   
   - Windows :
-  
+
+    `py manage.py makemigrations`
+
     `py manage.py migrate`
   
   - Linux ou Mac OS :
-  
+
+    `python3 manage.py makemigrations` ou `python manage.py makemigrations`
+
     `python3 manage.py migrate` ou `python manage.py migrate`
+
+- Créer un jeu de données :
+
+  - Windows :
+
+    `py manage.py init_local_dev`
+
+  - Linux ou Mac OS :
+
+    `python3 manage.py init_local_dev` ou `python manage.py init_local_dev`
 
 ## Créer les dossiers spécifiques au projet
 
@@ -74,14 +88,14 @@ brief 2b, le retour
 
   `models/`
 
-## Lancer le serveur Django :
+## Lancer le serveur Django
 
 - Vérifier que l'environnement virtuel est lancé et que vous êtes bien dans le dossier `src` :
 
   - Windows :
   
     `py manage.py runserver`
-    
+
   - Linux ou Mac OS :
   
     `python3 manage.py runserver` ou `python manage.py runserver`
