@@ -4,7 +4,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from app.models import Image, Prediction, Resultat
 
-from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, ResultatListSerializer
+from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, PredictionDetailsSerializer, ResultatListSerializer
 
 # Create your views here.
 
@@ -32,6 +32,7 @@ class ImageAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
 
 class PredictionAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     serializer_class = PredictionListSerializer
+    details_serializer_class = PredictionDetailsSerializer
 
     def get_queryset(self):
         queryset = Prediction.objects.all()

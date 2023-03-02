@@ -25,6 +25,19 @@ class ImageDetailsSerializer(ModelSerializer):
 
         return serializer.data
 
+class ResultatListSerializer(ModelSerializer):
+    categorie = SerializerMethodField()
+
+    class Meta:
+        model = Resultat
+        fields = ["prediction", "score", "categorie"]
+    
+    def get_categorie(self, instance):
+        queryset = instance.categorie
+        serializer = CategorieListSerializer(queryset)
+
+        return serializer.data
+
 class PredictionListSerializer(ModelSerializer):
     image = SerializerMethodField()
 
@@ -38,15 +51,15 @@ class PredictionListSerializer(ModelSerializer):
         
         return serializer.data
 
-class ResultatListSerializer(ModelSerializer):
-    categorie = SerializerMethodField()
+class PredictionDetailsSerializer(ModelSerializer):
+    image = SerializerMethodField()
 
     class Meta:
-        model = Resultat
-        fields = ["prediction", "score", "categorie"]
+        model = Prediction
+        fields = ["id", "modele", "image"]
     
-    def get_categorie(self, instance):
-        queryset = instance.categorie
-        serializer = CategorieListSerializer(queryset)
-
+    def get_image(self, instance):
+        queryset = instance.image
+        serializer = ImageDetailsSerializer(queryset)
+        
         return serializer.data
