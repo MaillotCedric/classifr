@@ -10,13 +10,13 @@ CATEGORIES = ["tulipe", "rose", "tournesol", "pizza", "gateau"]
 MODELES = [
     {
         "nom": "monet",
-        "url": "models/monet.h5",
+        "chemin": "models/monet.h5",
         "accuracy": 80.6,
         "recall": 82.0
     },
     {
         "nom": "dali",
-        "url": "models/dali.h5",
+        "chemin": "models/dali.h5",
         "accuracy": 88.5,
         "recall": 87.3
     }
@@ -24,31 +24,31 @@ MODELES = [
 IMAGES = [
     {
         "nom": "tulipe_1",
-        "url": "data/tulipe_1.jpeg",
+        "chemin": "data/tulipe_1.jpeg",
         "categorie": "tulipe",
         "active": True
     },
     {
         "nom": "rose_1",
-        "url": "data/rose_1.jpeg",
+        "chemin": "data/rose_1.jpeg",
         "categorie": "rose",
         "active": True
     },
     {
         "nom": "tournesol_1",
-        "url": "data/tournesol_1.jpeg",
+        "chemin": "data/tournesol_1.jpeg",
         "categorie": "tournesol",
         "active": True
     },
     {
         "nom": "pizza_1",
-        "url": "data/pizza_1.jpeg",
+        "chemin": "data/pizza_1.jpeg",
         "categorie": "pizza",
         "active": False
     },
     {
         "nom": "gateau_1",
-        "url": "data/gateau_1.jpeg",
+        "chemin": "data/gateau_1.jpeg",
         "categorie": "gateau",
         "active": False
     }
@@ -85,7 +85,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.MIGRATE_HEADING("Modèles..."))
         for modele in MODELES:
             modele_cree = Modele.objects.create(nom=modele["nom"],
-                                                url=modele["url"],
+                                                chemin=modele["chemin"],
                                                 accuracy=modele["accuracy"],
                                                 recall=modele["recall"])
 
@@ -105,7 +105,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.MIGRATE_HEADING("Images..."))
         for image in IMAGES:
             image_cree = Image.objects.create(nom=image["nom"],
-                                              url=image["url"],
+                                              chemin=image["chemin"],
                                               categorie=categories_bdd[image["categorie"]],
                                               active=image["active"])
             
