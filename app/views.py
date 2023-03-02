@@ -48,5 +48,9 @@ class ResultatAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Resultat.objects.all()
+        prediction_id = self.request.GET.get("prediction_id")
+
+        if prediction_id is not None:
+            queryset = queryset.filter(prediction_id=prediction_id)
 
         return queryset
