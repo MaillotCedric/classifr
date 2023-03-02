@@ -28,13 +28,18 @@
             </nav>
         {% endblock %}
 
-        <div class="container">
+        <div id="app-container">
             <div class="row">
-                <div class="col-4">
+                <div id="app-filtres-container" class="col-3">
+                    <div id="titre-filtres">
+                        <div id="titre-filtres-container">
+                            Filtres <i id="icon-filtre" class='fas fa-sm fa-filter'></i>
+                        </div>
+                    </div>
                     {% block filtres %}
                     {% endblock %}
                 </div>
-                <div class="col-8">
+                <div id="app-contenu-container" class="col-9">
                     {% block contenu %}
                     {% endblock %}
                 </div>
