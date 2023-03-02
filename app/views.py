@@ -35,5 +35,9 @@ class PredictionAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Prediction.objects.all()
+        modele_id = self.request.GET.get("modele_id")
+
+        if modele_id is not None:
+            queryset = queryset.filter(modele_id=modele_id)
 
         return queryset
