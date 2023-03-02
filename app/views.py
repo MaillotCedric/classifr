@@ -57,3 +57,9 @@ class ResultatAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
             queryset = queryset.filter(prediction_id=prediction_id)
 
         return queryset
+
+def index_images(request):
+    return render(request, "images.html", {})
+
+def index_predictions(request):
+    return render(request, "predictions.html", {})
