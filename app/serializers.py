@@ -43,7 +43,7 @@ class PredictionListSerializer(ModelSerializer):
 
     class Meta:
         model = Prediction
-        fields = ["id", "modele", "image"]
+        fields = ["id", "modele", "image", "correct", "commentaire"]
     
     def get_image(self, instance):
         queryset = instance.image
@@ -56,7 +56,7 @@ class PredictionDetailsSerializer(ModelSerializer):
 
     class Meta:
         model = Prediction
-        fields = ["id", "modele", "image"]
+        fields = ["id", "modele", "image", "correct", "commentaire"]
     
     def get_image(self, instance):
         queryset = instance.image

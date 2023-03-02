@@ -17,8 +17,8 @@ class MultipleSerializerMixin:
         
         return super().get_serializer_class()
 
-class UserViewSet(ModelViewSet):
-    http_method_names = ["get", "post", "put", "patch"]
+class ReadUpdateViewSet(ModelViewSet):
+    http_method_names = ["get", "put", "patch"]
 
 class ImageAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     serializer_class = ImageListSerializer
@@ -33,7 +33,7 @@ class ImageAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
         
         return queryset
 
-class PredictionAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
+class PredictionAPIViewSet(MultipleSerializerMixin, ReadUpdateViewSet):
     serializer_class = PredictionListSerializer
     details_serializer_class = PredictionDetailsSerializer
 
