@@ -10,14 +10,14 @@ class CategorieListSerializer(ModelSerializer):
 class ImageListSerializer(ModelSerializer):
     class Meta:
         model = Image
-        fields = ["id", "nom", "url", "categorie"]
+        fields = ["id", "nom", "chemin", "categorie"]
 
 class ImageDetailsSerializer(ModelSerializer):
     categorie = SerializerMethodField()
 
     class Meta:
         model = Image
-        fields = ["id", "nom", "url", "categorie"]
+        fields = ["id", "nom", "chemin", "categorie"]
     
     def get_categorie(self, instance):
         queryset = instance.categorie
