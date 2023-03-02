@@ -18,11 +18,12 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from app.views import ImageAPIViewSet
+from app.views import ImageAPIViewSet, PredictionAPIViewSet
 
 router = routers.SimpleRouter()
 
 router.register("image", ImageAPIViewSet, basename="image")
+router.register("prediction", PredictionAPIViewSet, basename="prediction")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

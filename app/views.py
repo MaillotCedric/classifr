@@ -2,9 +2,9 @@ from django.shortcuts import render
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from app.models import Image
+from app.models import Image, Prediction
 
-from app.serializers import ImageListSerializer, ImageDetailsSerializer
+from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer
 
 # Create your views here.
 
@@ -28,4 +28,12 @@ class ImageAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
         if categorie_id is not None:
             queryset = queryset.filter(categorie_id=categorie_id)
         
+        return queryset
+
+class PredictionAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
+    serializer_class = PredictionListSerializer
+
+    def get_queryset(self):
+        queryset = Prediction.objects.all()
+
         return queryset
