@@ -58,11 +58,15 @@ brief 2b, le retour
   
   - Windows :
 
+    `py manage.py migrate`
+
     `py manage.py makemigrations`
 
     `py manage.py migrate`
   
   - Linux ou Mac OS :
+
+    `python3 manage.py migrate` ou `python manage.py migrate`
 
     `python3 manage.py makemigrations` ou `python manage.py makemigrations`
 
