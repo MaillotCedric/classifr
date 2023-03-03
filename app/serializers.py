@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer,SerializerMethodField
 
-from app.models import Image, Categorie, Prediction, Resultat
+from app.models import Image, Categorie, Prediction, Resultat, Modele
 
 class CategorieListSerializer(ModelSerializer):
     class Meta:
@@ -63,3 +63,8 @@ class PredictionDetailsSerializer(ModelSerializer):
         serializer = ImageDetailsSerializer(queryset)
         
         return serializer.data
+
+class ModeleSerializer(ModelSerializer):
+    class Meta:
+        model = Modele
+        fields = ["id", "nom", "date_created", "accuracy", "recall"]
