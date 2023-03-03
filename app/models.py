@@ -1,4 +1,6 @@
-from django.db import models
+from django.db import models, transaction
+
+from rest_framework.exceptions import APIException
 
 class Modele(models.Model):
     nom = models.CharField(max_length=255)
@@ -12,6 +14,20 @@ class Modele(models.Model):
 
     def __str__(self):
         return self.nom
+    
+    @transaction.atomic
+    def predict(self, request, pk):
+        # TODO : renommer l'image si il existe une image avec le même nom
+        message_erreur = "Une erreur est survenue"
+        donnees = request.data
+        modele = Modele.objects.get(pk=pk)
+
+        try:
+            print("prediction...")
+            print(donnees)
+            print(modele.nom, modele.date_created)
+        except:
+            raise APIException(detail=message_erreur)
 
 class Categorie(models.Model):
     nom = models.CharField(max_length=255)
