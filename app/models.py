@@ -16,11 +16,16 @@ class Modele(models.Model):
         return self.nom
     
     @transaction.atomic
-    def load(self):
-        message_erreur = "Erreur lors du chargement du modèle"
+    def predict(self, request, pk):
+        # TODO : renommer l'image si il existe une image avec le même nom
+        message_erreur = "Une erreur est survenue"
+        donnees = request.data
+        modele = Modele.objects.get(pk=pk)
 
         try:
-            print("loading model...")
+            print("prediction...")
+            print(donnees)
+            print(modele.nom, modele.date_created)
         except:
             raise APIException(detail=message_erreur)
 

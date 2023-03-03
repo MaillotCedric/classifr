@@ -68,9 +68,9 @@ class ModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
 
         return queryset
     
-    @action(detail=True, methods=["get"])
-    def load(self, request, pk):
-        self.get_object().load()
+    @action(detail=True, methods=["post"])
+    def predict(self, request, pk):
+        self.get_object().predict(request, pk)
 
         return Response()
 
