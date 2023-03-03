@@ -2,9 +2,9 @@ from django.shortcuts import render
 
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
-from app.models import Image, Prediction, Resultat
+from app.models import Image, Prediction, Resultat, Modele, DetailsModele
 
-from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, PredictionDetailsSerializer, ResultatListSerializer
+from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, PredictionDetailsSerializer, ResultatListSerializer, ModeleSerializer, DetailsModeleSerializer
 
 # Create your views here.
 
@@ -58,8 +58,31 @@ class ResultatAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
 
         return queryset
 
+class ModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
+    serializer_class = ModeleSerializer
+
+    def get_queryset(self):
+        queryset = Modele.objects.all()
+
+        return queryset
+
+class DetailsModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
+    serializer_class = DetailsModeleSerializer
+
+    def get_queryset(self):
+        queryset = DetailsModele.objects.all()
+        modele_id = self.request.GET.get("modele_id")
+
+        if modele_id is not None:
+            queryset = queryset.filter(modele_id=modele_id)
+
+        return queryset
+
 def index_images(request):
     return render(request, "images.html", {})
 
 def index_predictions(request):
     return render(request, "predictions.html", {})
+
+def index_modeles(request):
+    return render(request, "modeles.html", {})
