@@ -83,3 +83,6 @@ def index_images(request):
 
 def index_predictions(request):
     return render(request, "predictions.html", {})
+
+def index_modeles(request):
+    return render(request, "modeles.html", {})
