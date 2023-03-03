@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from app.models import Image, Prediction, Resultat, Modele, DetailsModele
 
@@ -65,6 +67,12 @@ class ModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
         queryset = Modele.objects.all()
 
         return queryset
+    
+    @action(detail=True, methods=["get"])
+    def load(self, request, pk):
+        self.get_object().load()
+
+        return Response()
 
 class DetailsModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     serializer_class = DetailsModeleSerializer

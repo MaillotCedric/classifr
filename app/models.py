@@ -1,4 +1,6 @@
-from django.db import models
+from django.db import models, transaction
+
+from rest_framework.exceptions import APIException
 
 class Modele(models.Model):
     nom = models.CharField(max_length=255)
@@ -12,6 +14,15 @@ class Modele(models.Model):
 
     def __str__(self):
         return self.nom
+    
+    @transaction.atomic
+    def load(self):
+        message_erreur = "Erreur lors du chargement du modèle"
+
+        try:
+            print("loading model...")
+        except:
+            raise APIException(detail=message_erreur)
 
 class Categorie(models.Model):
     nom = models.CharField(max_length=255)
