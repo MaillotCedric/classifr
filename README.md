@@ -52,7 +52,9 @@ brief 2b, le retour
   
 - Effectuer les premières migrations :
 
-  `cd src`
+  - supprimer les anciennes migrations :
+
+    `app/migrations/<fichier_migration>.py`
   
   puis
   
