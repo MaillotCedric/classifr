@@ -2,22 +2,18 @@ from PIL import Image
 
 import numpy as np
 
-import tensorflow as tf
-
 def get_image(image_path, shape):
     image = Image.open(image_path).resize(shape)
 
     return image
 
-def get_labels(datasets_path):
-    labels = tf.keras.preprocessing.image_dataset_from_directory(datasets_path).class_names
+def get_labels():
+    return ["tulipe", "rose", "tournesol", "pizza", "gateau"]
 
-    return labels
-
-def predict_image(model, image_path, shape, datasets_path="data/images"):
+def predict_image(model, image_path, shape):
     image = get_image(image_path, shape)
     np_image = np.asarray(image)
-    labels = get_labels(datasets_path)
+    labels = get_labels()
     predictions = model.predict(np.array([np_image]))
     label_index = np.argmax(predictions)
 
