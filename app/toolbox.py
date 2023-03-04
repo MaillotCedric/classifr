@@ -2,6 +2,8 @@ from PIL import Image
 
 import numpy as np
 
+import os
+
 def get_image(image_path, shape):
     image = Image.open(image_path).resize(shape)
 
@@ -18,3 +20,6 @@ def predict_image(model, image_path, shape):
     label_index = np.argmax(predictions)
 
     return labels[label_index]
+
+def save_image(image_path, saved_image_path, image_name):
+    Image.open(image_path).save(os.path.join(saved_image_path, image_name))

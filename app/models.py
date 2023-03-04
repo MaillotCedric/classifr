@@ -4,7 +4,7 @@ from django.conf import settings
 
 from rest_framework.exceptions import APIException
 
-from app.toolbox import get_image, predict_image
+from app.toolbox import save_image, predict_image
 
 import tensorflow as tf
 
@@ -30,16 +30,18 @@ class Modele(models.Model):
         donnees = request.data
         nom_modele = Modele.objects.get(pk=pk).nom
         model_dir = settings.MODELS_ROOT
-        media_dir = settings.DATA_IMAGES_TESTS_ROOT
+        image_test_dir = settings.DATA_IMAGES_TESTS_ROOT
+        images_inconnues_dir = settings.DATA_IMAGES_INCONNUES_ROOT
         model_path = os.path.join(model_dir, f"{nom_modele}.h5")
-        # image_path = os.path.join(media_dir, "tulips.jpg")
-        image_path = os.path.join(media_dir, "pizza.jpg")
+        image_path = os.path.join(image_test_dir, "tulipe.jpg")
+        # image_path = os.path.join(image_test_dir, "pizza.jpg")
         image_shape = (224, 224)
 
         try:
             print("prediction...")
             modele = tf.keras.models.load_model(model_path)
-            # image = get_image(image_path=image_path, shape=image_shape)
+            save_image(image_path=image_path, saved_image_path=images_inconnues_dir, image_name="tulipe.jpg")
+            # save_image(image_path=image_path, saved_image_path=images_inconnues_dir, image_name="pizza.jpg")
             label = predict_image(model=modele, image_path=image_path, shape=image_shape)
 
             print("label :", label)
