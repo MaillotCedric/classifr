@@ -12,9 +12,16 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+MODELS_ROOT = os.path.join(BASE_DIR, "models")
+DATA_ROOT = os.path.join(BASE_DIR, "data")
+DATA_IMAGES_ROOT = os.path.join(BASE_DIR, "data/images")
+DATA_IMAGES_TESTS_ROOT = os.path.join(BASE_DIR, "data/images/tests")
+DATA_IMAGES_INCONNUES_ROOT = os.path.join(BASE_DIR, "data/images/x_inconnue")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
