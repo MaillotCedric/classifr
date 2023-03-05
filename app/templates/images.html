@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/images.css' %}">
+{% endblock %}
+
 {% block filtres %}
+    <div class="form-group">
+        <label class="label-filtre" for="select-categorie">Catégorie :</label>
+        <select id="select-categorie" class="form-control"></select>
+    </div>
 {% endblock %}
 
 {% block contenu %}
+    <div id="images-container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'scripts/images.js' %}"></script>
 {% endblock %}

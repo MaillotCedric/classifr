@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 
 from rest_framework import routers
 
-from app.views import ImageAPIViewSet, PredictionAPIViewSet, ResultatAPIViewSet, ModeleAPIViewSet, DetailsModeleAPIViewSet
+from app.views import ImageAPIViewSet, PredictionAPIViewSet, ResultatAPIViewSet, ModeleAPIViewSet, DetailsModeleAPIViewSet, CategorieAPIViewSet
+
+from project import settings
 
 router = routers.SimpleRouter()
 
+router.register("categorie", CategorieAPIViewSet, basename="categorie")
 router.register("image", ImageAPIViewSet, basename="image")
 router.register("prediction", PredictionAPIViewSet, basename="prediction")
 router.register("resultat", ResultatAPIViewSet, basename="resultat")
@@ -32,4 +36,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include(router.urls)),
     path("", include("app.urls"))
-]
+] + static("data/images", document_root= settings.DATA_IMAGES_ROOT)

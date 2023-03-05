@@ -4,9 +4,9 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from app.models import Image, Prediction, Resultat, Modele, DetailsModele
+from app.models import Image, Prediction, Resultat, Modele, DetailsModele, Categorie
 
-from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, PredictionDetailsSerializer, ResultatListSerializer, ModeleSerializer, DetailsModeleSerializer
+from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, PredictionDetailsSerializer, ResultatListSerializer, ModeleSerializer, DetailsModeleSerializer, CategorieListSerializer
 
 # Create your views here.
 
@@ -21,6 +21,14 @@ class MultipleSerializerMixin:
 
 class ReadUpdateViewSet(ModelViewSet):
     http_method_names = ["get", "put", "patch"]
+
+class CategorieAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
+    serializer_class = CategorieListSerializer
+
+    def get_queryset(self):
+        queryset = Categorie.objects.exclude(nom="inconnue")
+
+        return queryset
 
 class ImageAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     serializer_class = ImageListSerializer
