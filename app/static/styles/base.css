@@ -20,6 +20,7 @@
 
 #titre-filtres {
     font-size: 28px;
+    margin-bottom: 30px;
 }
 
 #titre-filtres-container {
@@ -28,6 +29,10 @@
 
 #icon-filtre {
     font-size: 16px;
+}
+
+.label-filtre {
+    font-weight: bold;
 }
 
 #app-contenu-container {
