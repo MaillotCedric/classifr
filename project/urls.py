@@ -18,10 +18,11 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from app.views import ImageAPIViewSet, PredictionAPIViewSet, ResultatAPIViewSet, ModeleAPIViewSet, DetailsModeleAPIViewSet
+from app.views import ImageAPIViewSet, PredictionAPIViewSet, ResultatAPIViewSet, ModeleAPIViewSet, DetailsModeleAPIViewSet, CategorieAPIViewSet
 
 router = routers.SimpleRouter()
 
+router.register("categorie", CategorieAPIViewSet, basename="categorie")
 router.register("image", ImageAPIViewSet, basename="image")
 router.register("prediction", PredictionAPIViewSet, basename="prediction")
 router.register("resultat", ResultatAPIViewSet, basename="resultat")
