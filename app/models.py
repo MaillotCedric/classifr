@@ -6,7 +6,7 @@ from rest_framework.exceptions import APIException
 
 from app.toolbox import save_image, predict_image
 
-import tensorflow as tf
+# import tensorflow as tf
 
 import os
 

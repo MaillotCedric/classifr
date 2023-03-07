@@ -8,6 +8,7 @@ from app.models import Image, Prediction, Resultat, Modele, DetailsModele, Categ
 
 from app.serializers import ImageListSerializer, ImageDetailsSerializer, PredictionListSerializer, PredictionDetailsSerializer, ResultatListSerializer, ModeleSerializer, DetailsModeleSerializer, CategorieListSerializer
 
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 class MultipleSerializerMixin:
@@ -94,11 +95,14 @@ class DetailsModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
 
         return queryset
 
+@login_required(login_url='login')
 def index_images(request):
     return render(request, "images.html", {})
 
+@login_required(login_url='login')
 def index_predictions(request):
     return render(request, "predictions.html", {})
 
+@login_required(login_url='login')
 def index_modeles(request):
     return render(request, "modeles.html", {})
