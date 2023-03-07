@@ -1,5 +1,6 @@
 function creer_select_categorie(data) {
     let categories = data.results;
+    console.log ("regarde ça stoplait8=========> ",data.results);
     let select_categorie = document.getElementById("select-categorie");
 
     select_categorie.innerHTML = `
@@ -11,7 +12,15 @@ function creer_select_categorie(data) {
             <option value="`+ categorie.id +`">`+ categorie.nom +`</option>
         `;
     });
+
 };
+
+function afficher_nom_categorie(data) {
+    let h5 = document.getElementById("h5_" + data.id);
+
+    h5.innerHTML = "Catégorie : " + data.nom;
+};
+
 
 function afficher_images(data) {
     let images = data.results;
@@ -20,14 +29,15 @@ function afficher_images(data) {
     let count = 0;
 
     images_container.innerHTML = "";
-    images.forEach(image => {
+    images.forEach((image, index) => {
         console.log("8======>",image);
         count++;
         images_container.innerHTML += `
             <!-- Bouton -->
-            <div class="img-thumbnail" data-toggle="modal" data-target="#exampleModal`+count+`" id="`+image.nom+count+`">
-                <img id="`+image.nom+count+`"  src="`+ image.chemin +`" alt="`+ image.nom +`"/>
+            <div class="img-thumbnail " data-toggle="modal" data-target="#exampleModal`+count+`" id="`+image.nom+count+`">
+                    <img id_categorie=`+ image.categorie +` src="`+ image.chemin +`" alt="`+ image.nom +`" />
             </div>
+
 
             <!-- Modal -->
             <div class="modal fade" id="exampleModal`+count+`" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -36,25 +46,34 @@ function afficher_images(data) {
                         <div class="modal-header">
                             <h5 class="modal-title" id="`+image.nom+ ' '+count+`">`+ image.nom +`</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="false">&times;</span>
                             </button>
                         </div>
 
                         <!-- Contenu du Modal -->
                     <div class="modal-body">
                         <img  id="`+image.nom+count+`" src="`+ image.chemin +`" alt="`+ image.nom +`"/> 
+                        <h5 id="h5_`+ image.categorie +`">`+"Code catégorie : "+ image.categorie +`</h5>
                     </div>
 
                     <!-- Boutton en bas du modal -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-secondary stretched-link" data-dismiss="modal">Fermer</button>
                         </div>
                 </div>
             </div>
             </div>
         `;
     });
+
+    $("img").click((event) => {
+        let id_categorie = event.target.attributes.id_categorie.value;
+
+        ajax_call("GET", "../api/categorie/" + id_categorie, donnees={}, success_callback=afficher_nom_categorie, error_callback=afficher_error);
+    })
 };
+
+
 
 ajax_call("GET", "../api/categorie", donnees={}, success_callback=creer_select_categorie);
 
@@ -67,4 +86,3 @@ $(document).on("change", "#select-categorie", function(event){
     
     ajax_call("GET", ajax_url, donnees={}, success_callback=afficher_images, error_callback=afficher_error);
 });
-
