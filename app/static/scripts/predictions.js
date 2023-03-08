@@ -28,12 +28,15 @@ $(document).on("change", "#input-file-image", (event) => {
         <img id="image-preview" class="img-thumbnail" src="`+ src +`" alt="`+ nom_image +`">
     `);
 
+    // nettoyage du local storage
+    localStorage.clear();
+
     // enregistrement de l'image dans le local storage
     reader.onload = function () {
         let this_image = reader.result;
         localStorage.setItem("image_data", this_image);
     };
-    // reader.readAsDataURL(event.target.files[0]);
+    reader.readAsDataURL(event.target.files[0]);
 });
 
 $(document).on("click", "#form-prediction-submit-btn", (event) => {

@@ -30,24 +30,20 @@ class Modele(models.Model):
         donnees = request.data
         nom_modele = Modele.objects.get(pk=pk).nom
         model_dir = settings.MODELS_ROOT
-        # image_test_dir = settings.DATA_IMAGES_TESTS_ROOT
-        # images_inconnues_dir = settings.DATA_IMAGES_INCONNUES_ROOT
         images_dir = settings.DATA_IMAGES_ROOT
         model_path = os.path.join(model_dir, f"{nom_modele}.h5")
-        # image_path = os.path.join(image_test_dir, "tulipe.jpg")
-        # image_path = os.path.join(image_test_dir, "pizza.jpg")
+        image_name = donnees["nom_image"]
+        image_path = os.path.join(images_dir, image_name)
         image_shape = (224, 224)
 
         try:
             print("prediction...")
-            # modele = tf.keras.models.load_model(model_path)
-            # save_image(image_path=image_path, saved_image_path=images_inconnues_dir, image_name="tulipe.jpg")
-            # save_image(image_path=image_path, saved_image_path=images_inconnues_dir, image_name="pizza.jpg")
-            save_image(image_base_64=donnees["data_image"], saved_image_path=images_dir, image_name=donnees["nom_image"])
-            # label = predict_image(model=modele, image_path=image_path, shape=image_shape)
 
-            # print("label :", label)
-            # print("données", donnees)
+            modele = tf.keras.models.load_model(model_path)
+            save_image(image_base_64=donnees["data_image"], saved_image_path=images_dir, image_name=image_name)
+            resultats = predict_image(model=modele, image_path=image_path, shape=image_shape)
+
+            print("resultats :", resultats)
         except:
             raise APIException(detail=message_erreur)
 
