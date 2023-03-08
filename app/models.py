@@ -33,15 +33,16 @@ class Modele(models.Model):
         model_dir = settings.MODELS_ROOT
         images_dir = settings.DATA_IMAGES_ROOT
         model_path = os.path.join(model_dir, f"{nom_modele}.h5")
+        image = donnees["image"]
         image_name = donnees["nom_image"]
-        image_path = os.path.join(images_dir, image_name)
+        image_path = os.path.join(images_dir, image)
         image_shape = (224, 224)
 
         try:
             print("prediction...")
 
             modele = tf.keras.models.load_model(model_path)
-            save_image(image_base_64=donnees["data_image"], saved_image_path=images_dir, image_name=image_name)
+            save_image(image_base_64=donnees["data_image"], saved_image_path=images_dir, image_name=image)
             resultats = predict_image(model=modele, image_path=image_path, shape=image_shape)
             print(resultats)
 

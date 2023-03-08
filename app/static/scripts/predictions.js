@@ -44,9 +44,10 @@ $(document).on("click", "#form-prediction-submit-btn", (event) => {
 
     // récupération de l'image à partir du local storage (image en base 64)
     let data_image = localStorage.getItem("image_data");
-    let nom_image = document.getElementById("image-preview").alt;
+    let image = document.getElementById("image-preview").alt;
+    let nom_image = image.replace(/\.[^/.]+$/, "");
     let modele_id = document.getElementById("select-modele").value;
-    let donnees = {data_image, nom_image};
+    let donnees = {data_image, image, nom_image};
 
     ajax_call("POST", "../api/modele/"+ modele_id +"/predict/", donnees=donnees, success_callback=afficher_success, error_callback=afficher_error);
 });
