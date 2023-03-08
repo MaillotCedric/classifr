@@ -2,7 +2,7 @@ from PIL import Image
 
 from io import BytesIO
 
-from decimal import Decimal
+from decimal import Decimal, ROUND_DOWN
 
 import numpy as np
 
@@ -15,7 +15,10 @@ import base64
 import math
 
 def rounded_percentage(number, nb_of_decimals):
-    return Decimal(math.floor(number * 100 * math.pow(10, nb_of_decimals)) / math.pow(10, nb_of_decimals))
+    return rounded_decimal(Decimal(math.floor(number * 100 * math.pow(10, nb_of_decimals)) / math.pow(10, nb_of_decimals)))
+
+def rounded_decimal(decimal_number):
+    return Decimal(decimal_number).quantize(Decimal('.1'), rounding=ROUND_DOWN)
 
 def formated_path(path):
     return "../" + re.sub(".*classifr/", '', path.replace("\\", "/"))
@@ -41,7 +44,7 @@ def predict_image(model, image_path, shape):
 
         resultats.append({
             "categorie": labels[index],
-            "confidence": confidence if confidence < 100 else Decimal(99.9)
+            "confidence": confidence if confidence < 100 else rounded_decimal(Decimal(99.9))
         })
 
     # return labels[label_index]
