@@ -4,7 +4,7 @@ from django.conf import settings
 
 from rest_framework.exceptions import APIException
 
-from app.toolbox import save_image, predict_image
+from app.toolbox import save_image, predict_image, formated_path
 
 # import tensorflow as tf
 
@@ -28,24 +28,44 @@ class Modele(models.Model):
         # TODO : renommer l'image si il existe une image avec le même nom
         message_erreur = "Une erreur est survenue"
         donnees = request.data
-        nom_modele = Modele.objects.get(pk=pk).nom
+        modele_utilise = Modele.objects.get(pk=pk)
+        nom_modele = modele_utilise.nom
         model_dir = settings.MODELS_ROOT
-        image_test_dir = settings.DATA_IMAGES_TESTS_ROOT
-        images_inconnues_dir = settings.DATA_IMAGES_INCONNUES_ROOT
+        images_dir = settings.DATA_IMAGES_ROOT
         model_path = os.path.join(model_dir, f"{nom_modele}.h5")
-        image_path = os.path.join(image_test_dir, "tulipe.jpg")
-        # image_path = os.path.join(image_test_dir, "pizza.jpg")
+        image = donnees["image"]
+        image_name = donnees["nom_image"]
+        image_path = os.path.join(images_dir, image)
         image_shape = (224, 224)
 
         try:
             print("prediction...")
-            modele = tf.keras.models.load_model(model_path)
-            save_image(image_path=image_path, saved_image_path=images_inconnues_dir, image_name="tulipe.jpg")
-            # save_image(image_path=image_path, saved_image_path=images_inconnues_dir, image_name="pizza.jpg")
-            label = predict_image(model=modele, image_path=image_path, shape=image_shape)
 
-            print("label :", label)
-            print("données", donnees)
+            modele = tf.keras.models.load_model(model_path)
+            save_image(image_base_64=donnees["data_image"], saved_image_path=images_dir, image_name=image)
+            resultats = predict_image(model=modele, image_path=image_path, shape=image_shape)
+            print(resultats)
+
+            print("enregistrement en bdd...")
+
+            print("enregistrement de l'image...")
+            # créer l'image en bdd
+            categorie_inconnue = Categorie.objects.get(pk=1)
+            image_cree = Image.objects.create(nom=image_name,
+                                        chemin=formated_path(image_path),
+                                        categorie=categorie_inconnue)
+            print("enregistrement de la prédiction...")
+            # créer la prédiction en bdd
+            prediction_cree = Prediction.objects.create(modele=modele_utilise,
+                                                        image=image_cree)
+            print("enregistrement des résultats...")
+            # créer les résultats en bdd
+            for resultat in resultats:
+                categorie_utilisee = Categorie.objects.get(nom=resultat["categorie"])
+
+                Resultat.objects.create(score=resultat["confidence"],
+                                        categorie=categorie_utilisee,
+                                        prediction=prediction_cree)
         except:
             raise APIException(detail=message_erreur)
 
