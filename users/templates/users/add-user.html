@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenu %}
+<h1 class="text-center">Ajouter un nouvel utilisateur</h1>
+
+<section class="">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enregistrer</button>
+  </form>
+
+  {% if errors %}
+    <div class="alert alert-danger" role="alert">
+      {% for field, errors in errors.items %}
+        {{ field|title }}:
+        <ul>
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}
+
+<!-- <h1 class="text-center">Ajouter un utilisateur</h1>
+
+<form method="POST" style="font-size: 20">
+  {% csrf_token %}
+
+  {{ form.as_p }}
+
+  {% for message in errors.value %}
+    <h3 style="color: red;">
+        {{ message }}
+    </h3>
+  {% endfor %}
+
+  <input type="submit" value="Ajouter">
+
+</form> -->
+
+

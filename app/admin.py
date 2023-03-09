@@ -1,5 +1,6 @@
 from django.contrib import admin
 from app.models import Modele, Categorie, DetailsModele, Image, Prediction, Resultat
+from users.models import CustomUser
 
 class ModeleAdmin(admin.ModelAdmin):
     list_display = ("nom", "chemin", "date_created", "accuracy", "recall")
@@ -19,9 +20,13 @@ class PredictionAdmin(admin.ModelAdmin):
 class ResultatAdmin(admin.ModelAdmin):
     list_display = ("score", "categorie", "prediction")
 
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ("username", "is_superuser")
+
 admin.site.register(Modele, ModeleAdmin)
 admin.site.register(Categorie, CategorieAdmin)
 admin.site.register(DetailsModele, DetailsModeleAdmin)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Prediction, PredictionAdmin)
 admin.site.register(Resultat, ResultatAdmin)
+admin.site.register(CustomUser,CustomUserAdmin) 

@@ -23,6 +23,8 @@ from app.views import ImageAPIViewSet, PredictionAPIViewSet, ResultatAPIViewSet,
 
 from project import settings
 
+from users.views import add_user, login_user, logout_user, home
+
 router = routers.SimpleRouter()
 
 router.register("categorie", CategorieAPIViewSet, basename="categorie")
@@ -35,5 +37,8 @@ router.register("details-modele", DetailsModeleAPIViewSet, basename="details-mod
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include(router.urls)),
-    path("", include("app.urls"))
+    path("", include("app.urls")),
+    path('compte/ajouter/', add_user, name="add-user"),
+    path('compte/connexion/', login_user, name="login"),
+    path('compte/déconnexion/', logout_user, name="logout"),
 ] + static("data/images", document_root= settings.DATA_IMAGES_ROOT)

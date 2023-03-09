@@ -14,23 +14,24 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!--------------------->
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+        <!--------------------->
+        <!---- Chart.js ---->
+        <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
+        <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
+        <script src="https://unpkg.com/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.js"></script>
+
         {% block style %}
         {% endblock %}
         <title>Classifr</title>
     </head>
     <body>
-        {% block navbar %}
-            <nav id="app-navbar" class="nav navbar-dark bg-primary">
-                <span class="navbar-brand mb-0 h1 font-weight-bold">Classifr</span>
-
-                <a class="nav-link text-white" href="{% url 'images' %}">Images</a>
-                <a class="nav-link text-white" href="{% url 'modeles' %}">Modèles</a>
-                <a class="nav-link text-white" href="{% url 'predictions' %}">Prédictions</a>
-            </nav>
-        {% endblock %}
-
+        <div>
+        {% include 'navbar.html' %}
+        </div>
+        
         <div id="app-container">
             <div class="row">
+                {% if user.is_authenticated %}
                 <div id="app-filtres-container" class="col-3">
                     <div id="titre-filtres">
                         <div id="titre-filtres-container">
@@ -40,12 +41,30 @@
                     {% block filtres %}
                     {% endblock %}
                 </div>
+                {% endif %}
+
+
                 <div id="app-contenu-container" class="col-9">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="container-fluid p-0">
+                          <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" >
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ message }}
+                          </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
                     {% block contenu %}
                     {% endblock %}
                 </div>
             </div>
         </div>
+        
 
         <!----- JQuery ------>
         <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
@@ -59,5 +78,7 @@
         <script src="{% static 'scripts/api.js' %}"></script>
         {% block scripts %}
         {% endblock %}
+        
+        {% include 'footer.html' %}
     </body>
 </html>
