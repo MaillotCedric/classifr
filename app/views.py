@@ -79,9 +79,9 @@ class ModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     
     @action(detail=True, methods=["post"])
     def predict(self, request, pk):
-        self.get_object().predict(request, pk)
+        data = self.get_object().predict(request, pk)
 
-        return Response()
+        return Response(data)
 
 class DetailsModeleAPIViewSet(MultipleSerializerMixin, ReadOnlyModelViewSet):
     serializer_class = DetailsModeleSerializer
