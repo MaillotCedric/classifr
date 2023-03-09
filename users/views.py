@@ -18,7 +18,7 @@ def add_user(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Nouvel utilisateur créé")
-            return redirect('home')
+            return redirect('images')
         else:
             context["errors"] = form.errors
     

@@ -14,25 +14,20 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!--------------------->
         <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+        <!--------------------->
+        <!---- Chart.js ---->
+        <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
+        <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
+        <script src="https://unpkg.com/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.js"></script>
+
         {% block style %}
         {% endblock %}
         <title>Classifr</title>
     </head>
     <body>
-        
-        {% block navbar %}
-            <nav id="app-navbar" class="nav navbar-dark bg-primary">
-                <span class="navbar-brand mb-0 h1 font-weight-bold">Classifr</span>
-
-                {% if user.is_authenticated %}
-                <a class="nav-link text-white" href="{% url 'images' %}">Images</a>
-                <a class="nav-link text-white" href="{% url 'modeles' %}">Modèles</a>
-                <a class="nav-link text-white" href="{% url 'predictions' %}">Prédictions</a>
-                <a class="nav-link text-white" href="{% url 'logout' %}">Déconnexion</a>
-                {% endif %}
-            </nav>
-        {% endblock %}
-        
+        <div>
+        {% include 'navbar.html' %}
+        </div>
         
         <div id="app-container">
             <div class="row">
@@ -48,7 +43,8 @@
                 </div>
                 {% endif %}
 
-                <div id="app-contenu-container" class="col-12">
+
+                <div id="app-contenu-container" class="col-9">
 
                     {% if messages %}
                         {% for message in messages %}
@@ -82,5 +78,7 @@
         <script src="{% static 'scripts/api.js' %}"></script>
         {% block scripts %}
         {% endblock %}
+        
+        {% include 'footer.html' %}
     </body>
 </html>

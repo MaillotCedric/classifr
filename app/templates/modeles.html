@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block filtres %}
+    <div class="form-group">
+        <label class="label-filtre" for="select-modele">Modèle :</label>
+        <select id="select-modele" class="form-control"></select>
+    </div>
 {% endblock %}
 
 {% block contenu %}
+    <div id="modeles-container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'scripts/modeles.js' %}"></script>
 {% endblock %}
