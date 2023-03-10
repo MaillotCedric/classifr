@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block filtres %}
+    <div class="form-group">
+        <label class="label-filtre" for="select-modele-filtre">Modèle :</label>
+        <select id="select-modele-filtre" class="form-control"></select>
+    </div>
 {% endblock %}
 
 {% block contenu %}
@@ -20,7 +24,7 @@
         </div>
         <div class="form-group">
             <label for="select-modele">Sélectionner un modèle :</label>
-            <select id="select-modele" class="form-control"></select>
+            <select id="select-modele-prediction" class="form-control"></select>
         </div>
         <button id="form-prediction-submit-btn" class="btn btn-primary">Prédire</button>
     </form>

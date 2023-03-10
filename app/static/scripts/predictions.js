@@ -1,6 +1,6 @@
-function creer_select_modele(data) {
+function creer_select_modele_prediction(data) {
     let modeles = data.results;
-    let select_modele = document.getElementById("select-modele");
+    let select_modele = document.getElementById("select-modele-prediction");
 
     modeles.forEach((modele, index) => {
         if (index === 0) {
@@ -15,7 +15,27 @@ function creer_select_modele(data) {
     });
 };
 
-ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_select_modele, error_callback=afficher_error);
+function creer_select_modele_filtre(data) {
+    let modeles = data.results;
+    let select_modele = document.getElementById("select-modele-filtre");
+
+    select_modele.innerHTML = `
+        <option value="" selected>Sélectionner un modèle</option>
+    `;
+
+    modeles.forEach((modele, index) => {
+        select_modele.innerHTML += `
+            <option value="`+ modele.id +`">`+ modele.nom +`</option>
+        `;
+    });
+};
+
+function creer_selects(data) {
+    creer_select_modele_prediction(data);
+    creer_select_modele_filtre(data);
+};
+
+ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
 
 $(document).on("change", "#input-file-image", (event) => {
     event.preventDefault();
@@ -46,7 +66,7 @@ $(document).on("click", "#form-prediction-submit-btn", (event) => {
     let data_image = localStorage.getItem("image_data");
     let image = document.getElementById("image-preview").alt;
     let nom_image = image.replace(/\.[^/.]+$/, "");
-    let modele_id = document.getElementById("select-modele").value;
+    let modele_id = document.getElementById("select-modele-prediction").value;
     let donnees = {data_image, image, nom_image};
 
     ajax_call("POST", "../api/modele/"+ modele_id +"/predict/", donnees=donnees, success_callback=afficher_success, error_callback=afficher_error);
