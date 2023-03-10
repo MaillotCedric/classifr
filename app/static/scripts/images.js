@@ -1,6 +1,5 @@
 function creer_select_categorie(data) {
     let categories = data.results;
-    console.log ("regarde ça stoplait8=========> ",data.results);
     let select_categorie = document.getElementById("select-categorie");
 
     select_categorie.innerHTML = `
@@ -24,13 +23,11 @@ function afficher_nom_categorie(data) {
 
 function afficher_images(data) {
     let images = data.results;
-    console.log(data.results)
     let images_container = document.getElementById("images-container");
     let count = 0;
 
     images_container.innerHTML = "";
     images.forEach((image, index) => {
-        console.log("8======>",image);
         count++;
         images_container.innerHTML += `
             <!-- Bouton -->
