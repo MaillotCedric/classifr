@@ -14,20 +14,24 @@
 {% endblock %}
 
 {% block contenu %}
-    <div id="image-preview-container" class="img-thumbnail">
-        Choisir une image
+    <!-- formulaire prédiction -->
+    <div class="d-none">
+        <div id="image-preview-container" class="img-thumbnail">
+            Choisir une image
+        </div>
+        <form id="form-prediction">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="file" id="input-file-image" class="form-control-file">
+            </div>
+            <div class="form-group">
+                <label for="select-modele">Sélectionner un modèle :</label>
+                <select id="select-modele-prediction" class="form-control"></select>
+            </div>
+            <button id="form-prediction-submit-btn" class="btn btn-primary">Prédire</button>
+        </form>
     </div>
-    <form id="form-prediction">
-        {% csrf_token %}
-        <div class="form-group">
-            <input type="file" id="input-file-image" class="form-control-file">
-        </div>
-        <div class="form-group">
-            <label for="select-modele">Sélectionner un modèle :</label>
-            <select id="select-modele-prediction" class="form-control"></select>
-        </div>
-        <button id="form-prediction-submit-btn" class="btn btn-primary">Prédire</button>
-    </form>
+    <!-- end formulaire prédiction -->
 {% endblock %}
 
 {% block scripts %}
