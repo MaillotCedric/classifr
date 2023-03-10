@@ -10,6 +10,8 @@ import tensorflow as tf
 
 import os
 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2";
+
 class Modele(models.Model):
     nom = models.CharField(max_length=255)
     chemin = models.CharField(max_length=255)
