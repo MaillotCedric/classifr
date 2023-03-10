@@ -1,3 +1,17 @@
+function afficher_predictions(data) {
+    let predictions = data.results;
+    let predictions_container = document.getElementById("predictions-container");
+    
+    predictions_container.innerHTML = "";
+    predictions.forEach(prediction => {
+        predictions_container.innerHTML += `
+            <div class="img-thumbnail">
+                <img id_prediction="`+ prediction.id +`" src="`+ prediction.image.chemin +`" alt="`+ prediction.image.nom +`"/>
+            </div>
+        `;
+    });
+};
+
 function creer_select_modele_prediction(data) {
     let modeles = data.results;
     let select_modele = document.getElementById("select-modele-prediction");
@@ -36,6 +50,7 @@ function creer_selects(data) {
 };
 
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
+ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error);
 
 $(document).on("change", "#input-file-image", (event) => {
     event.preventDefault();
@@ -70,4 +85,12 @@ $(document).on("click", "#form-prediction-submit-btn", (event) => {
     let donnees = {data_image, image, nom_image};
 
     ajax_call("POST", "../api/modele/"+ modele_id +"/predict/", donnees=donnees, success_callback=afficher_success, error_callback=afficher_error);
+});
+
+$(document).on("change", "#select-modele-filtre", function(event){
+    event.preventDefault();
+    id_modele = event.target.value;
+    ajax_url = id_modele !== "" ? "../api/prediction/?modele_id="+id_modele : "../api/prediction";
+    
+    ajax_call("GET", ajax_url, donnees={}, success_callback=afficher_predictions, error_callback=afficher_error);
 });
