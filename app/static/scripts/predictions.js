@@ -5,8 +5,28 @@ function afficher_predictions(data) {
     predictions_container.innerHTML = "";
     predictions.forEach(prediction => {
         predictions_container.innerHTML += `
-            <div class="img-thumbnail">
-                <img id_prediction="`+ prediction.id +`" src="`+ prediction.image.chemin +`" alt="`+ prediction.image.nom +`"/>
+            <div id_prediction="`+ prediction.id +`" class="img-thumbnail" data-toggle="modal" data-target="#modal-details-prediction">
+                <img src="`+ prediction.image.chemin +`" alt="`+ prediction.image.nom +`"/>
+            </div>
+
+            <!-- modal détails prédiction -->
+            <div class="modal fade" id="modal-details-prediction" tabindex="-1" role="dialog" aria-labelledby="detailsPredictionModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Détails de la prédiction
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <!-- <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        </div> -->
+                    </div>
+                </div>
             </div>
         `;
     });
