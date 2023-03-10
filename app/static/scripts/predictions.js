@@ -20,13 +20,9 @@ function afficher_predictions(data) {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div id="details-prediction-`+ prediction.id +`-image-container" class="img-thumbnail">
-                                image
-                            </div>
+                            <div id="details-prediction-`+ prediction.id +`-image-container" class="img-thumbnail"></div>
                             <hr/>
-                            <div id="details-prediction-`+ prediction.id +`-resultats-container">
-                                résultats
-                            </div>
+                            <div id="details-prediction-`+ prediction.id +`-resultats-container"></div>
                         </div>
                         <!-- <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -86,6 +82,38 @@ function afficher_image_details_prediction(data) {
     `;
 };
 
+function sorted_predictions(predictions) {
+    predictions.sort((a, b) => {
+        let score_a = a.score;
+        let score_b = b.score;
+        
+        return score_b - score_a;
+    });
+};
+
+function afficher_resultats_details_prediction(data) {
+    let resultats = data.results;
+    let resultats_container = document.getElementById("details-prediction-"+ id_prediction +"-resultats-container");
+
+    sorted_predictions(resultats);
+
+    resultats_container.innerHTML = "";
+    resultats_container.innerHTML += `<div class="mb-2">Prédictions</div>`;
+    resultats_container.innerHTML += `<ul class="list-group">`;
+    resultats.forEach(resultat => {
+        let categorie = resultat.categorie.nom;
+        let score = resultat.score + " %";
+
+        resultats_container.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                `+ categorie +`
+                <span class="badge badge-primary badge-pill">`+ score +`</span>
+            </li>
+        `;
+    });
+    resultats_container.innerHTML += `</ul>`;
+};
+
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
 ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error);
 
@@ -138,5 +166,5 @@ $(document).on("click", ".img-thumbnail-preview", (event) => {
     ajax_url_prediction_resultats = "../api/resultat/?prediction_id=" + id_prediction;
 
     ajax_call("GET", ajax_url_prediction_instance, donnees={}, success_callback=afficher_image_details_prediction, error_callback=afficher_error);
-    // ajax_call("GET", ajax_url_prediction_resultats, donnees={}, success_callback=afficher_success, error_callback=afficher_error);
+    ajax_call("GET", ajax_url_prediction_resultats, donnees={}, success_callback=afficher_resultats_details_prediction, error_callback=afficher_error);
 });
