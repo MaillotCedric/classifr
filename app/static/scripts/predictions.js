@@ -5,8 +5,21 @@ function afficher_predictions(data) {
     predictions_container.innerHTML = "";
     predictions.forEach(prediction => {
         predictions_container.innerHTML += `
-            <div id_prediction="`+ prediction.id +`" class="img-thumbnail img-thumbnail-preview" data-toggle="modal" data-target="#modal-details-prediction-`+ prediction.id +`">
-                <img id_prediction="`+ prediction.id +`" src="`+ prediction.image.chemin +`" alt="`+ prediction.image.nom +`"/>
+            <div class="card">
+                <div class="card-body">
+                    <div class="prediction-image-container">
+                        <img src="`+ prediction.image.chemin +`" alt="`+ prediction.image.nom +`"/>
+                    </div>
+                    <hr style="margin: 10px;"/>
+                    <div class="prediction-actions-container">
+                        <button type="button" class="btn btn-primary btn-sm">
+                            Feedback <i class="fa fa-comment"></i>
+                        </button>
+                        <button id_prediction="`+ prediction.id +`" type="button" class="btn btn-secondary btn-sm btn-details-predictions" data-toggle="modal" data-target="#modal-details-prediction-`+ prediction.id +`">
+                            Détails <i id_prediction="`+ prediction.id +`" class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- modal détails prédiction -->
@@ -160,7 +173,7 @@ $(document).on("change", "#select-modele-filtre", function(event){
     ajax_call("GET", ajax_url, donnees={}, success_callback=afficher_predictions, error_callback=afficher_error);
 });
 
-$(document).on("click", ".img-thumbnail-preview", (event) => {
+$(document).on("click", ".btn-details-predictions", (event) => {
     id_prediction = event.target.attributes.id_prediction.value;
     ajax_url_prediction_instance = "../api/prediction/" + id_prediction;
     ajax_url_prediction_resultats = "../api/resultat/?prediction_id=" + id_prediction;
