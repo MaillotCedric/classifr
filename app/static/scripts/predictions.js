@@ -1,9 +1,20 @@
+function reset_form_feedback(id_prediction) {
+    let select_correct_feedback = document.getElementById("select-feedback-prediction-" + id_prediction);
+    let textarea_commentaire_feedback = document.getElementById("textarea-feedback-prediction-" + id_prediction);
+
+    select_correct_feedback.value = "";
+    textarea_commentaire_feedback.value = "";
+};
+
 function afficher_predictions(data) {
     let predictions = data.results;
     let predictions_container = document.getElementById("predictions-container");
     
     predictions_container.innerHTML = "";
     predictions.forEach(prediction => {
+        let checked = prediction.correct === true ? "checked" : "";
+        let commentaire = prediction.commentaire === null ? "" : prediction.commentaire;
+
         predictions_container.innerHTML += `
             <div class="card">
                 <div class="card-body">
@@ -12,7 +23,7 @@ function afficher_predictions(data) {
                     </div>
                     <hr style="margin: 10px;"/>
                     <div class="prediction-actions-container">
-                        <button type="button" class="btn btn-primary btn-sm">
+                        <button id_prediction="`+ prediction.id +`" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-feedback-prediction-`+ prediction.id +`">
                             Feedback <i class="fa fa-comment"></i>
                         </button>
                         <button id_prediction="`+ prediction.id +`" type="button" class="btn btn-secondary btn-sm btn-details-predictions" data-toggle="modal" data-target="#modal-details-prediction-`+ prediction.id +`">
@@ -50,8 +61,52 @@ function afficher_predictions(data) {
                     </div>
                 </div>
             </div>
+
+            <!-- modal feedback prédiction -->
+            <div id_prediction="`+ prediction.id +`" class="modal fade modal-feedback" id="modal-feedback-prediction-`+ prediction.id +`" tabindex="-1" role="dialog" aria-labelledby="detailsPredictionModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Faire un feedback
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        <form>
+                            <!-- <div class="form-group form-check">
+                                <input id="checkbox-feedback-prediction-`+ prediction.id +`" type="checkbox" class="form-check-input" id="checkbox-prediction-correct" `+ checked +`>
+                                <label class="form-check-label" for="checkbox-prediction-correct">Prédiction correcte ?</label>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="select-feedback-prediction-`+ prediction.id +`">Prédiction bonne ?</label>
+                                <select id="select-feedback-prediction-`+ prediction.id +`" class="form-control">
+                                    <option value="" selected>Non renseigné</option>
+                                    <option value="oui">Oui</option>
+                                    <option value="non">Non</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="textarea-prediction-commentaire">Commentaire</label>
+                                <textarea id="textarea-feedback-prediction-`+ prediction.id +`" class="form-control" id="textarea-prediction-commentaire" rows="3">`+ commentaire +`</textarea>
+                            </div>
+                            <button type="submit" id_prediction="`+ prediction.id +`" class="btn btn-primary btn-submit-feedback-prediction">Envoyer le feedback</button>
+                        </form>
+                        </div>
+                        <!-- <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
         `;
     });
+
+    $(".modal-feedback").on("hidden.bs.modal", function (event) {
+        let id_prediction = event.target.attributes.id_prediction.value;
+
+        reset_form_feedback(id_prediction);
+    }); 
 };
 
 function creer_select_modele_prediction(data) {
@@ -140,7 +195,7 @@ function afficher_resultats_details_prediction(data) {
 
 function afficher_feedback_details_prediction(data) {
     let correct = data.correct === null ? "Non renseigné" : data.correct === true ? "Oui" : "Non";
-    let commentaire = data.commentaire === null ? "Aucun commentaire" : data.commentaire;
+    let commentaire = data.commentaire === null ? "Aucun commentaire" : data.commentaire === "" ? "Aucun commentaire" : data.commentaire;
     let feedback_container = document.getElementById("details-prediction-"+ id_prediction +"-feedback-container");
 
     feedback_container.innerHTML = "";
@@ -160,8 +215,14 @@ function afficher_details_prediction(data) {
     afficher_feedback_details_prediction(data);
 };
 
+function fermer_modale_feedback(data) {
+    let id_prediction = data.id;
+    
+    $("#modal-feedback-prediction-" + id_prediction).modal("hide");
+};
+
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
-ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error);
+ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error); 
 
 $(document).on("change", "#input-file-image", (event) => {
     event.preventDefault();
@@ -213,4 +274,18 @@ $(document).on("click", ".btn-details-predictions", (event) => {
 
     ajax_call("GET", ajax_url_prediction_instance, donnees={}, success_callback=afficher_details_prediction, error_callback=afficher_error);
     ajax_call("GET", ajax_url_prediction_resultats, donnees={}, success_callback=afficher_resultats_details_prediction, error_callback=afficher_error);
+});
+
+$(document).on("click", ".btn-submit-feedback-prediction", (event) => {
+    event.preventDefault();
+
+    let id_prediction = event.target.attributes.id_prediction.value;
+    let select_correct_value = document.getElementById("select-feedback-prediction-" + id_prediction).value;
+    let correct = select_correct_value === "" ? null : select_correct_value === "oui" ? true : false;
+    let commentaire = document.getElementById("textarea-feedback-prediction-" + id_prediction).value;
+    let ajax_url = "../api/prediction/" + id_prediction + "/";
+    let donnees = {correct, commentaire};
+    afficher(donnees);
+
+    ajax_call("PUT", ajax_url, donnees=donnees, success_callback=fermer_modale_feedback, error_callback=afficher_error);
 });
