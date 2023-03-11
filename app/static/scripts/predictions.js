@@ -41,6 +41,8 @@ function afficher_predictions(data) {
                             </div>
                             <hr/>
                             <div id="details-prediction-`+ prediction.id +`-resultats-container"></div>
+                            <hr/>
+                            <div id="details-prediction-`+ prediction.id +`-feedback-container"></div>
                         </div>
                         <!-- <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -136,6 +138,28 @@ function afficher_resultats_details_prediction(data) {
     resultats_container.innerHTML += `</ul>`;
 };
 
+function afficher_feedback_details_prediction(data) {
+    let correct = data.correct === null ? "Non renseigné" : data.correct === true ? "Oui" : "Non";
+    let commentaire = data.commentaire === null ? "Aucun commentaire" : data.commentaire;
+    let feedback_container = document.getElementById("details-prediction-"+ id_prediction +"-feedback-container");
+
+    feedback_container.innerHTML = "";
+    feedback_container.innerHTML += `<div class="mb-2">Feedback</div>`;
+    feedback_container.innerHTML += `
+        <div>
+            Prédiction correcte : `+ correct +`
+        </div>
+        <div>
+            Commentaire : `+ commentaire +`
+        </div>
+    `;
+};
+
+function afficher_details_prediction(data) {
+    afficher_header_details_prediction(data);
+    afficher_feedback_details_prediction(data);
+};
+
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
 ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error);
 
@@ -187,6 +211,6 @@ $(document).on("click", ".btn-details-predictions", (event) => {
     ajax_url_prediction_instance = "../api/prediction/" + id_prediction;
     ajax_url_prediction_resultats = "../api/resultat/?prediction_id=" + id_prediction;
 
-    ajax_call("GET", ajax_url_prediction_instance, donnees={}, success_callback=afficher_header_details_prediction, error_callback=afficher_error);
+    ajax_call("GET", ajax_url_prediction_instance, donnees={}, success_callback=afficher_details_prediction, error_callback=afficher_error);
     ajax_call("GET", ajax_url_prediction_resultats, donnees={}, success_callback=afficher_resultats_details_prediction, error_callback=afficher_error);
 });
