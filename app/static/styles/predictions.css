@@ -16,7 +16,7 @@
     flex-wrap: wrap;
 }
 
-#predictions-container > .img-thumbnail, .modal-body > .img-thumbnail {
+#predictions-container > .img-thumbnail, .modal-body > .details-prediction-header > .img-thumbnail {
     display: flex;
     height: 200px;
     margin-bottom: 15px;
@@ -34,7 +34,7 @@
     transform: translateY(4px);
 }
 
-#predictions-container > .img-thumbnail > img, .modal-body > .img-thumbnail > img {
+#predictions-container > .img-thumbnail > img, .modal-body > .details-prediction-header > .img-thumbnail > img {
     display: block;
     margin: auto;
     width: 100%;
@@ -70,4 +70,8 @@
     margin-bottom: 10px;
     margin-top: 10px;
     justify-content: space-evenly;
+}
+
+.details-prediction-header {
+    display: flex;
 }

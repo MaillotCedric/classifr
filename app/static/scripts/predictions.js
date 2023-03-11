@@ -33,7 +33,12 @@ function afficher_predictions(data) {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div id="details-prediction-`+ prediction.id +`-image-container" class="img-thumbnail"></div>
+                            <div class="details-prediction-header">
+                                <div id="details-prediction-`+ prediction.id +`-image-container" class="img-thumbnail"></div>
+                                <div>
+                                    Modèle utilisé : <span id="details-prediction-`+ prediction.id +`-modele" class="badge badge-secondary badge-success" style="font-size: 15px;"></span>
+                                </div>
+                            </div>
                             <hr/>
                             <div id="details-prediction-`+ prediction.id +`-resultats-container"></div>
                         </div>
@@ -84,15 +89,19 @@ function creer_selects(data) {
     creer_select_modele_filtre(data);
 };
 
-function afficher_image_details_prediction(data) {
+function afficher_header_details_prediction(data) {
     let id_prediction = data.id;
     let chemin_image = data.image.chemin;
+    let nom_modele = data.modele.nom;
     let image_container = document.getElementById("details-prediction-"+ id_prediction +"-image-container");
+    let nom_modele_container = document.getElementById("details-prediction-"+ id_prediction +"-modele");
 
     image_container.innerHTML = "";
+    nom_modele_container.innerHTML == "";
     image_container.innerHTML = `
         <img src="`+ chemin_image +`"/>
     `;
+    nom_modele_container.innerHTML = nom_modele;
 };
 
 function sorted_predictions(predictions) {
@@ -178,6 +187,6 @@ $(document).on("click", ".btn-details-predictions", (event) => {
     ajax_url_prediction_instance = "../api/prediction/" + id_prediction;
     ajax_url_prediction_resultats = "../api/resultat/?prediction_id=" + id_prediction;
 
-    ajax_call("GET", ajax_url_prediction_instance, donnees={}, success_callback=afficher_image_details_prediction, error_callback=afficher_error);
+    ajax_call("GET", ajax_url_prediction_instance, donnees={}, success_callback=afficher_header_details_prediction, error_callback=afficher_error);
     ajax_call("GET", ajax_url_prediction_resultats, donnees={}, success_callback=afficher_resultats_details_prediction, error_callback=afficher_error);
 });
