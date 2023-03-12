@@ -1,25 +1,28 @@
 function creer_select_modele(data) {
     let modeles = data.results.reverse();
+    let last_model = modeles[0];
     let select_modele = document.getElementById("select-modele");
 
-    select_modele.innerHTML = `
-        <option value="`+ modeles[0].id +`" selected>Sélectionner un modèle</option>
-    `;
+    // select_modele.innerHTML = `
+    //     <option value="`+ modeles[0].id +`" selected>Sélectionner un modèle</option>
+    // `;
 
     modeles.forEach(modele => {
         select_modele.innerHTML += `
             <option value="`+ modele.id +`">`+ modele.nom +`</option>
         `;
     });
+
+    afficher_modele(last_model);
 };
 
 function afficher_modele(data) {
-    console.log(data);
+    // console.log(data);
     let modele = data;
     
     let modeles_container = document.getElementById("modeles-container");
 
-    console.log(modele.date_created);
+    // console.log(modele.date_created);
     // Convertir la date au format "dd-mm-yyyy"
     let date_created = new Date(modele.date_created);
     let day = date_created.getDate().toString().padStart(2, '0');
@@ -198,7 +201,7 @@ $(document).on("change", "#select-modele", function(event){
     event.preventDefault();
 
     id_modele = event.target.value;
-    console.log(id_modele);
+    // console.log(id_modele);
     ajax_url = id_modele !== "" ? "../api/modele/"+id_modele : "../api/modele";
     
     ajax_call("GET", ajax_url, donnees={}, success_callback=afficher_modele, error_callback=afficher_error);
