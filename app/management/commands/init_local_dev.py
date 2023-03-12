@@ -10,13 +10,13 @@ CATEGORIES = ["tulipe", "rose", "tournesol", "pizza", "gateau"]
 MODELES = [
     {
         "nom": "monet",
-        "chemin": "models/monet.h5",
+        "chemin": "../models/monet.h5",
         "accuracy": 80.6,
         "recall": 82.0
     },
     {
         "nom": "dali",
-        "chemin": "models/dali.h5",
+        "chemin": "../models/dali.h5",
         "accuracy": 88.5,
         "recall": 87.3
     }
@@ -24,31 +24,31 @@ MODELES = [
 IMAGES = [
     {
         "nom": "tulipe_1",
-        "chemin": "data/tulipe_1.jpg",
+        "chemin": "../data/images/tulipe_1.jpg",
         "categorie": "tulipe",
         "active": True
     },
     {
         "nom": "rose_1",
-        "chemin": "data/rose_1.jpg",
+        "chemin": "../data/images/rose_1.jpg",
         "categorie": "rose",
         "active": True
     },
     {
         "nom": "tournesol_1",
-        "chemin": "data/tournesol_1.jpg",
+        "chemin": "../data/images/tournesol_1.jpg",
         "categorie": "tournesol",
         "active": True
     },
     {
         "nom": "pizza_1",
-        "chemin": "data/pizza_1.jpg",
+        "chemin": "../data/images/pizza_1.jpg",
         "categorie": "pizza",
         "active": False
     },
     {
         "nom": "gateau_1",
-        "chemin": "data/gateau_1.jpg",
+        "chemin": "../data/images/gateau_1.jpg",
         "categorie": "gateau",
         "active": False
     }
