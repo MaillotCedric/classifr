@@ -70,7 +70,9 @@ function afficher_images(data) {
     })
 };
 
+let nav_link_images = document.getElementById("nav-link-images");
 
+ajouter_classe("active", nav_link_images);
 
 ajax_call("GET", "../api/categorie", donnees={}, success_callback=creer_select_categorie);
 

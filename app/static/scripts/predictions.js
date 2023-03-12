@@ -245,6 +245,10 @@ function fermer_modale_feedback(data) {
     $("#modal-feedback-prediction-" + id_prediction).modal("hide");
 };
 
+let nav_link_predictions = document.getElementById("nav-link-predictions");
+
+ajouter_classe("active", nav_link_predictions);
+
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
 ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error); 
 

@@ -401,3 +401,7 @@ $(document).on("change", "#select-modele", function(event){
 // });
 
 ////// le bon
+
+let nav_link_modeles = document.getElementById("nav-link-modeles");
+
+ajouter_classe("active", nav_link_modeles);

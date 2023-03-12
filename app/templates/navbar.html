@@ -17,13 +17,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'images' %}">Images</a>
+                <a id="nav-link-images" class="nav-link" href="{% url 'images' %}">Images</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'modeles' %}">Modèles</a>
+                <a id="nav-link-modeles" class="nav-link" href="{% url 'modeles' %}">Modèles</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'predictions' %}">Prédictions</a>
+                <a id="nav-link-predictions" class="nav-link" href="{% url 'predictions' %}">Prédictions</a>
                 </li>
             </ul>
             {% if user.is_authenticated %}
