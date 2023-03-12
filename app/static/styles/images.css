@@ -16,3 +16,17 @@
     margin: auto;
     width: 100%;
 }
+
+#images-container > .img-thumbnail:hover {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 .1rem rgba(0,123,255,.25);
+    cursor: pointer;
+}
+
+#images-container > .img-thumbnail:active {
+    transform: translateY(4px);
+}
+
+.modal-details-image-body img {
+    width: 100%;
+}
