@@ -1,3 +1,27 @@
+function refresh_predictions() {
+    let loading_modal = document.getElementById("loading-modal");
+
+    // on enlève le message d'attente
+    ajouter_classe("d-none", loading_modal);
+    // on affiche les nouvelles prédictions
+    ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error); 
+};
+
+function reset_form_prediction() {
+    let image_preview_prediction = document.getElementById("image-preview-container");
+    let input_image_prediction = document.getElementById("input-image-prediction");
+    // let select_modele_prediction = document.getElementById("select-modele-prediction");
+    let btn_submit_prediction = document.getElementById("form-prediction-submit-btn");
+
+    image_preview_prediction.innerHTML = "Choisir une image";
+    input_image_prediction.value = "";
+    // select_modele_prediction.value = "1";
+
+    if (!possede_classe(btn_submit_prediction, "d-none")) {
+        ajouter_classe("d-none", btn_submit_prediction);
+    };
+};
+
 function reset_form_feedback(id_prediction) {
     let select_correct_feedback = document.getElementById("select-feedback-prediction-" + id_prediction);
     let textarea_commentaire_feedback = document.getElementById("textarea-feedback-prediction-" + id_prediction);
@@ -7,7 +31,7 @@ function reset_form_feedback(id_prediction) {
 };
 
 function afficher_predictions(data) {
-    let predictions = data.results;
+    let predictions = data.results.reverse();
     let predictions_container = document.getElementById("predictions-container");
     
     predictions_container.innerHTML = "";
@@ -63,7 +87,7 @@ function afficher_predictions(data) {
             </div>
 
             <!-- modal feedback prédiction -->
-            <div id_prediction="`+ prediction.id +`" class="modal fade modal-feedback" id="modal-feedback-prediction-`+ prediction.id +`" tabindex="-1" role="dialog" aria-labelledby="detailsPredictionModalLabel" aria-hidden="true">
+            <div id_prediction="`+ prediction.id +`" class="modal fade modal-feedback" id="modal-feedback-prediction-`+ prediction.id +`" tabindex="-1" role="dialog" aria-labelledby="feedbackPredictionModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -224,12 +248,17 @@ function fermer_modale_feedback(data) {
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_selects, error_callback=afficher_error);
 ajax_call("GET", "../api/prediction", donnees={}, success_callback=afficher_predictions, error_callback=afficher_error); 
 
-$(document).on("change", "#input-file-image", (event) => {
+$(document).on("change", "#input-image-prediction", (event) => {
     event.preventDefault();
 
     let src = URL.createObjectURL(event.target.files[0]);
     let nom_image = event.target.files[0].name;
     let reader = new FileReader();
+    let btn_submit_prediction = document.getElementById("form-prediction-submit-btn");
+
+    if (possede_classe(btn_submit_prediction, "d-none")) {
+        supprimer_classe("d-none", btn_submit_prediction);
+    };
 
     $("#image-preview-container").html(`
         <img id="image-preview" class="img-thumbnail" src="`+ src +`" alt="`+ nom_image +`">
@@ -255,8 +284,14 @@ $(document).on("click", "#form-prediction-submit-btn", (event) => {
     let nom_image = image.replace(/\.[^/.]+$/, "");
     let modele_id = document.getElementById("select-modele-prediction").value;
     let donnees = {data_image, image, nom_image};
+    let loading_modal = document.getElementById("loading-modal");
 
-    ajax_call("POST", "../api/modele/"+ modele_id +"/predict/", donnees=donnees, success_callback=afficher_success, error_callback=afficher_error);
+    // fermeture de la modale contenant le formulaire de prédiction
+    $('#modal-prediction').modal('hide');
+    // on affiche le message d'attente
+    supprimer_classe("d-none", loading_modal);
+
+    ajax_call("POST", "../api/modele/"+ modele_id +"/predict/", donnees=donnees, success_callback=refresh_predictions, error_callback=afficher_error);
 });
 
 $(document).on("change", "#select-modele-filtre", function(event){
@@ -289,3 +324,7 @@ $(document).on("click", ".btn-submit-feedback-prediction", (event) => {
 
     ajax_call("PUT", ajax_url, donnees=donnees, success_callback=fermer_modale_feedback, error_callback=afficher_error);
 });
+
+$("#modal-prediction").on("hidden.bs.modal", function () {
+    reset_form_prediction();
+}); 

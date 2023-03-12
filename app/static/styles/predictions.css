@@ -75,3 +75,24 @@
 .details-prediction-header {
     display: flex;
 }
+
+#loading-modal {
+    opacity: 0.8;
+}
+
+#loading-modal > div {
+    height: 100%;
+}
+
+#loading-modal-message-container {
+    margin: auto;
+    position: absolute !important;
+    top: 50%;
+    width: 100%;
+}
+
+#loading_message {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+}
