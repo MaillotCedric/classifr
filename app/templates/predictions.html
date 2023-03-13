@@ -7,23 +7,85 @@
 {% endblock %}
 
 {% block filtres %}
+    <div class="form-group">
+        <label class="label-filtre" for="select-modele-filtre">Modèle :</label>
+        <select id="select-modele-filtre" class="form-control"></select>
+    </div>
 {% endblock %}
 
 {% block contenu %}
-    <div id="image-preview-container" class="img-thumbnail">
-        Choisir une image
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-12">
+                <button id="btn-prediction" class="btn btn-primary" data-toggle="modal" data-target="#modal-prediction">Faire une prédiction</button>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-12">
+                <div id="predictions-container"></div>
+            </div>
+        </div>
     </div>
-    <form id="form-prediction">
-        {% csrf_token %}
-        <div class="form-group">
-            <input type="file" id="input-file-image" class="form-control-file">
+    
+    <div class="modal fade" id="modal-prediction" tabindex="-1" role="dialog" aria-labelledby="predictionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Faire une prédiction
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="image-preview-container" class="img-thumbnail">
+                        Choisir une image
+                    </div>
+                    <form id="form-prediction">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="file" id="input-image-prediction" class="form-control-file">
+                        </div>
+                        <div class="form-group">
+                            <label for="select-modele">Sélectionner un modèle :</label>
+                            <select id="select-modele-prediction" class="form-control"></select>
+                        </div>
+                        <button id="form-prediction-submit-btn" class="btn btn-primary d-none">Prédire</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="select-modele">Sélectionner un modèle :</label>
-            <select id="select-modele" class="form-control"></select>
+    </div>
+
+    <div id="loading-modal" class="modal-backdrop fade show d-none">
+        <div class="position-relative">
+            <div id="loading-modal-message-container" class="text-center position-absolute top-50 start-50 translate-middle">
+                <div id="loading_message">Prédiction en cours</div>
+                <div class="spinner-border text-light" role="status">
+                    <span class="visually-hidden">Veuillez patienter...</span>
+                </div>
+            </div>
         </div>
-        <button id="form-prediction-submit-btn" class="btn btn-primary">Prédire</button>
-    </form>
+    </div>
+
+    <!-- formulaire prédiction -->
+    <!-- <div class="d-none">
+        <div id="image-preview-container" class="img-thumbnail">
+            Choisir une image
+        </div>
+        <form id="form-prediction">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="file" id="input-file-image" class="form-control-file">
+            </div>
+            <div class="form-group">
+                <label for="select-modele">Sélectionner un modèle :</label>
+                <select id="select-modele-prediction" class="form-control"></select>
+            </div>
+            <button id="form-prediction-submit-btn" class="btn btn-primary">Prédire</button>
+        </form>
+    </div> -->
+    <!-- end formulaire prédiction -->
 {% endblock %}
 
 {% block scripts %}

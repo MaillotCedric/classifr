@@ -1,25 +1,28 @@
 function creer_select_modele(data) {
     let modeles = data.results.reverse();
+    let last_model = modeles[0];
     let select_modele = document.getElementById("select-modele");
 
-    select_modele.innerHTML = `
-        <option value="`+ modeles[0].id +`" selected>Sélectionner un modèle</option>
-    `;
+    // select_modele.innerHTML = `
+    //     <option value="`+ modeles[0].id +`" selected>Sélectionner un modèle</option>
+    // `;
 
     modeles.forEach(modele => {
         select_modele.innerHTML += `
             <option value="`+ modele.id +`">`+ modele.nom +`</option>
         `;
     });
+
+    afficher_modele(last_model);
 };
 
 function afficher_modele(data) {
-    console.log(data);
+    // console.log(data);
     let modele = data;
     
     let modeles_container = document.getElementById("modeles-container");
 
-    console.log(modele.date_created);
+    // console.log(modele.date_created);
     // Convertir la date au format "dd-mm-yyyy"
     let date_created = new Date(modele.date_created);
     let day = date_created.getDate().toString().padStart(2, '0');
@@ -32,28 +35,46 @@ function afficher_modele(data) {
             <h1>${modele.nom}</h1>
             <h3>Entraînement terminé le  ${date_created_formatted}</h3>
             <br>
-            
+            <hr/>
+            <h4 class="card-title">Métriques</h4>
             <div class="row">
                 <div class="col-md-12 col-lg-5">
-                    <p class="gauge-title text-center" style="font-weight: bold;">Précision</p>
+                    <p class="gauge-title text-center" style="font-weight: bold;">
+                        Précision
+                        <a id="popover-precision" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Précision" data-content="
+                            La précision indique la proportion des classifications identifiées qui étaient correctes.
+                            Par exemple, si le modèle a identifié 100 images comme étant des chiens et que 99 d’entre elles étaient effectivement des chiens, la précision est de 99 %.
+                        ">
+                            <i class="fa fa-info fa-border icon-info" aria-hidden="true" style="font-size:12px;"></i>
+                        </a>
+                    </p>
                     <canvas id="gauge-chart-precision"></canvas>
                 </div>
                 <div class="col-md-12 col-lg-5">
-                    <p class="gauge-title text-center" style="font-weight: bold;">Recall</p>
+                    <p class="gauge-title text-center" style="font-weight: bold;">
+                        Rappel
+                        <a id="popover-recall" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Rappel" data-content="
+                            Le rappel indique la proportion des classifications réelles qui ont été correctement identifiées.
+                            Par exemple, s’il y avait 100 images de pommes et que le modèle en a identifié 80 comme étant des pommes, le rappel est de 80 %
+                        ">
+                            <i class="fa fa-info fa-border icon-info" aria-hidden="true" style="font-size:12px;"></i>
+                        </a>
+                    </p>
                     <canvas id="gauge-chart-recall"></canvas>
                 </div>
             </div>
-
-            <div class="card" style="width: 35rem;">
+            <hr/>
+            <h4 class="card-title">Catégories</h4>
+            <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Catégories</h4>
+                    <!-- <h4 class="card-title">Catégories</h4> -->
                     <br>
                     <div class="row">
                     <div class="col-md-6">
                         <h5 class="card-subtitle mb-2 text-muted">Nom de la catégorie</h5>
                     </div>
                     <div class="col-md-6">
-                        <h5 class="card-subtitle mb-2 text-muted">Nb d'images</h5>
+                        <h5 class="card-subtitle mb-2 text-muted">Nombre d'images</h5>
                     </div>
                     </div>
                     <hr>
@@ -72,7 +93,7 @@ function afficher_modele(data) {
     var config_precision = {
         type: 'gauge',
         data: {
-            labels: ['Fail', 'Warning', 'Warning','Success'],
+            labels: ['Très faible', 'Faible', 'Modérée','Élevée'],
             datasets: [{
                 data: [25, 50, 85, 100],
                 value: precision_value,
@@ -97,7 +118,7 @@ function afficher_modele(data) {
                 color: 'rgba(0, 0, 0, 1)'
             },
             valueLabel: {
-                formatter: Math.round,
+                formatter: formatted_value,
                 display: true,
                 fontSize: 20,
                 backgroundColor: 'green'
@@ -122,7 +143,7 @@ function afficher_modele(data) {
     var config_recall = {
         type: 'gauge',
         data: {
-            labels: ['Fail', 'Warning', 'Warning','Success'],
+            labels: ['Très faible', 'Faible', 'Modéré','Élevé'],
             datasets: [{
                 data: [25, 50, 85, 100],
                 value: recall_value,
@@ -147,7 +168,7 @@ function afficher_modele(data) {
                 color: 'rgba(0, 0, 0, 1)'
             },
             valueLabel: {
-                formatter: Math.round,
+                formatter: formatted_value,
                 display: true,
                 fontSize: 20,
                 backgroundColor: 'green'
@@ -186,10 +207,18 @@ function afficher_modele(data) {
             return { nom: item.categorie.nom, nb_images: item.nb_images };
         });
         let categories_string = categories.map(function(item) {
-            return "<div class='row'><div class='col-md-6'>" + item.nom + "</div><div class='col-md-6'>" + item.nb_images + "</div></div><br>";
+            return "<div class='row'><div class='col-md-6'>" + item.nom + "</div><div class='col-md-6'>600</div></div><br>";
         }).join("");
         document.getElementById("categories").innerHTML = categories_string;
         }, error_callback=afficher_error);
+    
+    $("#popover-precision").popover({
+        trigger: 'focus'
+    });
+
+    $("#popover-recall").popover({
+        trigger: 'focus'
+    });
 };
 
 ajax_call("GET", "../api/modele", donnees={}, success_callback=creer_select_modele);
@@ -198,7 +227,7 @@ $(document).on("change", "#select-modele", function(event){
     event.preventDefault();
 
     id_modele = event.target.value;
-    console.log(id_modele);
+    // console.log(id_modele);
     ajax_url = id_modele !== "" ? "../api/modele/"+id_modele : "../api/modele";
     
     ajax_call("GET", ajax_url, donnees={}, success_callback=afficher_modele, error_callback=afficher_error);
@@ -401,3 +430,11 @@ $(document).on("change", "#select-modele", function(event){
 // });
 
 ////// le bon
+
+let nav_link_modeles = document.getElementById("nav-link-modeles");
+
+ajouter_classe("active", nav_link_modeles);
+
+function formatted_value(value) {
+    return Math.round(value) + " %";
+};

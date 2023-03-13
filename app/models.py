@@ -10,6 +10,8 @@ import tensorflow as tf
 
 import os
 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2";
+
 class Modele(models.Model):
     nom = models.CharField(max_length=255)
     chemin = models.CharField(max_length=255)
@@ -37,6 +39,11 @@ class Modele(models.Model):
         image_name = donnees["nom_image"]
         image_path = os.path.join(images_dir, image)
         image_shape = (224, 224)
+        data = {
+            "nom_modele": nom_modele,
+            "image_path": formated_path(image_path),
+            "resultats": {}
+        }
 
         try:
             print("prediction...")
@@ -44,7 +51,6 @@ class Modele(models.Model):
             modele = tf.keras.models.load_model(model_path)
             save_image(image_base_64=donnees["data_image"], saved_image_path=images_dir, image_name=image)
             resultats = predict_image(model=modele, image_path=image_path, shape=image_shape)
-            print(resultats)
 
             print("enregistrement en bdd...")
 
@@ -58,16 +64,23 @@ class Modele(models.Model):
             # créer la prédiction en bdd
             prediction_cree = Prediction.objects.create(modele=modele_utilise,
                                                         image=image_cree)
+            data["id_prediction"] = prediction_cree.id
             print("enregistrement des résultats...")
             # créer les résultats en bdd
             for resultat in resultats:
-                categorie_utilisee = Categorie.objects.get(nom=resultat["categorie"])
+                nom_categorie = resultat["categorie"]
+                score = resultat["confidence"]
+                categorie_utilisee = Categorie.objects.get(nom=nom_categorie)
 
-                Resultat.objects.create(score=resultat["confidence"],
+                Resultat.objects.create(score=score,
                                         categorie=categorie_utilisee,
                                         prediction=prediction_cree)
+                
+                data["resultats"][nom_categorie] = score
         except:
             raise APIException(detail=message_erreur)
+        
+        return data
 
 class Categorie(models.Model):
     nom = models.CharField(max_length=255)

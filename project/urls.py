@@ -39,6 +39,6 @@ urlpatterns = [
     path("api/", include(router.urls)),
     path("", include("app.urls")),
     path('compte/ajouter/', add_user, name="add-user"),
-    path('compte/connexion/', login_user, name="login"),
+    path('', login_user, name="login"),
     path('compte/déconnexion/', logout_user, name="logout"),
 ] + static("data/images", document_root= settings.DATA_IMAGES_ROOT)

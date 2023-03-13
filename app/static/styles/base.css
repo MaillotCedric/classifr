@@ -4,7 +4,7 @@
 
 #app-container {
     /* background-color: lightcoral; */
-    height: calc(100vh - 60px);
+    height: calc(100vh - 60px - 56px);
 }
 
 #app-container > .row, #app-container > .row > div {
@@ -39,4 +39,8 @@
     /* background-color: lightgreen; */
     overflow: scroll;
     padding: 15px;
+}
+
+.icon-info:hover {
+    cursor: pointer;
 }

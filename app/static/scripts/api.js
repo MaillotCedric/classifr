@@ -9,7 +9,7 @@ function afficher_error(error) {
 };
 
 function ajax_call(methode, ajax_url, donnees, success_callback, error_callback) {
-    let csrftoken = majuscule(methode) === "POST" ? document.querySelector('[name=csrfmiddlewaretoken]').value : "";
+    let csrftoken = majuscule(methode) === "POST" ? document.querySelector('[name=csrfmiddlewaretoken]').value : majuscule(methode) === "PUT" ? document.querySelector('[name=csrfmiddlewaretoken]').value : "";
 
     $.ajax({
         type: methode,

@@ -1,6 +1,5 @@
 function creer_select_categorie(data) {
     let categories = data.results;
-    console.log ("regarde ça stoplait8=========> ",data.results);
     let select_categorie = document.getElementById("select-categorie");
 
     select_categorie.innerHTML = `
@@ -18,19 +17,21 @@ function creer_select_categorie(data) {
 function afficher_nom_categorie(data) {
     let h5 = document.getElementById("h5_" + data.id);
 
-    h5.innerHTML = "Catégorie : " + data.nom;
+    h5.innerHTML = `
+        <h5>Catégorie</h5>
+        <hr/>
+        <div>`+ data.nom +`</div>
+    `;
 };
 
 
 function afficher_images(data) {
     let images = data.results;
-    console.log(data.results)
     let images_container = document.getElementById("images-container");
     let count = 0;
 
     images_container.innerHTML = "";
     images.forEach((image, index) => {
-        console.log("8======>",image);
         count++;
         images_container.innerHTML += `
             <!-- Bouton -->
@@ -44,22 +45,28 @@ function afficher_images(data) {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="`+image.nom+ ' '+count+`">`+ image.nom +`</h5>
+                            <h5 class="modal-title" id="`+image.nom+ ' '+count+`">Détails de l'image</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="false">&times;</span>
                             </button>
                         </div>
 
                         <!-- Contenu du Modal -->
-                    <div class="modal-body">
-                        <img  id="`+image.nom+count+`" src="`+ image.chemin +`" alt="`+ image.nom +`"/> 
-                        <h5 id="h5_`+ image.categorie +`">`+"Code catégorie : "+ image.categorie +`</h5>
+                    <div class="modal-body modal-details-image-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <img  id="`+image.nom+count+`" src="`+ image.chemin +`" alt="`+ image.nom +`"/>
+                                </div>
+                                <div id="h5_`+ image.categorie +`" class="col-6"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Boutton en bas du modal -->
-                        <div class="modal-footer">
+                        <!-- <div class="modal-footer">
                             <button type="button" class="btn btn-secondary stretched-link" data-dismiss="modal">Fermer</button>
-                        </div>
+                        </div> -->
                 </div>
             </div>
             </div>
@@ -73,7 +80,9 @@ function afficher_images(data) {
     })
 };
 
+let nav_link_images = document.getElementById("nav-link-images");
 
+ajouter_classe("active", nav_link_images);
 
 ajax_call("GET", "../api/categorie", donnees={}, success_callback=creer_select_categorie);
 
