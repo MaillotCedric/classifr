@@ -30,6 +30,41 @@ function reset_form_feedback(id_prediction) {
     textarea_commentaire_feedback.value = "";
 };
 
+function get_options_select_feedback(prediction) {
+    let options = "";
+
+    if (prediction.correct === true) {
+        options = `
+            <option value="">Non renseigné</option>
+            <option value="oui" selected>Oui</option>
+            <option value="non">Non</option>
+        `;
+    } else if(prediction.correct === false) {
+        options = `
+            <option value="">Non renseigné</option>
+            <option value="oui">Oui</option>
+            <option value="non" selected>Non</option>
+        `;
+    } else {
+        options = `
+            <option value="" selected>Non renseigné</option>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+        `;
+    };
+
+    return options;
+};
+
+function afficher_form_feedback(prediction) {
+    let id_prediction = prediction.id;
+    let select_correct_feedback = document.getElementById("select-feedback-prediction-" + id_prediction);
+    let textarea_commentaire_feedback = document.getElementById("textarea-feedback-prediction-" + id_prediction);
+
+    select_correct_feedback.value = prediction.correct === true ? "oui" : prediction.correct === false ? "non" : "";
+    textarea_commentaire_feedback.value = prediction.commentaire;
+};
+
 function afficher_predictions(data) {
     let predictions = data.results.reverse();
     let predictions_container = document.getElementById("predictions-container");
@@ -105,9 +140,7 @@ function afficher_predictions(data) {
                             <div class="form-group">
                                 <label for="select-feedback-prediction-`+ prediction.id +`">Prédiction bonne ?</label>
                                 <select id="select-feedback-prediction-`+ prediction.id +`" class="form-control">
-                                    <option value="" selected>Non renseigné</option>
-                                    <option value="oui">Oui</option>
-                                    <option value="non">Non</option>
+                                    `+ get_options_select_feedback(prediction) +`
                                 </select>
                             </div>
                             <div class="form-group">
@@ -130,6 +163,12 @@ function afficher_predictions(data) {
         let id_prediction = event.target.attributes.id_prediction.value;
 
         reset_form_feedback(id_prediction);
+    });
+
+    $(".modal-feedback").on("show.bs.modal", function (event) {
+        let id_prediction = event.target.attributes.id_prediction.value;
+
+        ajax_call("GET", "../api/prediction/" + id_prediction, donnees={}, success_callback=afficher_form_feedback, error_callback=afficher_error);
     }); 
 };
 
